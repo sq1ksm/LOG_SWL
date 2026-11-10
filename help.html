@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broadcast DX Logger - Pomoc</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #eef2f6;
+            margin: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
+        }
+
+        h1 {
+            margin: 0;
+            color: #1e3a5f;
+        }
+
+        h2 {
+            color: #1e3a5f;
+            border-bottom: 2px solid #1e3a5f;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            color: #0a7d32;
+            margin-top: 20px;
+        }
+
+        .opis {
+            color: #666;
+            margin-top: 5px;
+            font-size: 15px;
+        }
+
+        .warning {
+            font-size: 13px;
+            color: #cc0000;
+            font-weight: bold;
+            margin-top: 10px;
+            background: #fff0f0;
+            padding: 10px;
+            border-left: 4px solid #cc0000;
+            border-radius: 4px;
+        }
+
+        .info {
+            background: #eaf4ff;
+            padding: 12px;
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .sukces {
+            background: #eafaef;
+            padding: 12px;
+            border-left: 4px solid #28a745;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        ul,
+        ol {
+            line-height: 1.7;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: Consolas, Monaco, monospace;
+            color: #c7254e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background: #1e3a5f;
+            color: white;
+            text-align: left;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background: #f7f7f7;
+        }
+
+        .spis {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+
+        .spis a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .spis a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+
+        .kbd {
+            background: #333;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        .przycisk {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .p-add {
+            background: #28a745;
+        }
+
+        .p-csv {
+            background: #007bff;
+        }
+
+        .p-import {
+            background: #6c757d;
+        }
+
+        .p-clear {
+            background: #dc3545;
+        }
+
+        .p-note {
+            background: #17a2b8;
+        }
+
+        .p-del {
+            background: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>📻 Broadcast DX Logger — Pomoc</h1>
+        <div class="opis">
+            Instrukcja obsługi lokalnego dziennika nasłuchów radiowych LW / MW / SW / FM
+        </div>
+
+        <div class="warning">
+            ⚠️ Ważne: wszystkie dane przechowywane są wyłącznie w pamięci lokalnej przeglądarki
+            (localStorage). Wyczyszczenie danych przeglądarki, tryb prywatny lub zmiana komputera
+            spowodują utratę logu. Regularnie rób eksport do pliku CSV!
+        </div>
+
+        <div class="spis">
+            <b>Spis treści:</b>
+            <ol>
+                <li><a href="#cel">Do czego służy program</a></li>
+                <li><a href="#interfejs">Opis interfejsu</a></li>
+                <li><a href="#dodawanie">Dodawanie nowego nasłuchu</a></li>
+                <li><a href="#sinpo">Skala SINPO</a></li>
+                <li><a href="#edycja">Edycja wpisów w tabeli</a></li>
+                <li><a href="#uwagi">Podgląd uwag</a></li>
+                <li><a href="#szukanie">Wyszukiwanie wpisów</a></li>
+                <li><a href="#eksport">Eksport i import CSV</a></li>
+                <li><a href="#usuwanie">Usuwanie wpisów</a></li>
+                <li><a href="#wskazowki">Wskazówki i uwagi końcowe</a></li>
+            </ol>
+        </div>
+
+        <h2 id="cel">1. Do czego służy program</h2>
+        <p>
+            <b>Broadcast DX Logger</b> to prosty dziennik nasłuchów stacji radiowych nadających
+            w pasmach <b>LW</b> (Long Wave, fale długie), <b>MW</b> (Medium Wave, fale średnie),
+            <b>SW</b> (Short Wave, fale krótkie) oraz <b>FM</b> (UKF).
+        </p>
+        <p>
+            Program pozwala zapisywać szczegóły każdego nasłuchu: datę i czas w UTC,
+            częstotliwość, nazwę stacji, kraj, język, ocenę jakości odbioru w skali SINPO,
+            użyty odbiornik, antenę oraz dowolne uwagi. Wpisy można edytować, przeszukiwać,
+            eksportować do pliku CSV oraz importować z powrotem.
+        </p>
+
+        <div class="info">
+            💡 Czas każdego wpisu zapisywany jest automatycznie w standardzie <b>UTC</b>
+            (uniwersalny czas koordynowany) — jest to standard przyjęty w nasłuchach DX.
+        </div>
+
+        <h2 id="interfejs">2. Opis interfejsu</h2>
+        <ul>
+            <li><b>Zegar UTC</b> w prawym górnym rogu — pokazuje aktualny czas uniwersalny.</li>
+            <li><b>Licznik nasłuchów</b> — pokazuje liczbę zapisanych wpisów.</li>
+            <li><b>Formularz</b> — pola do wpisania danych nowego nasłuchu.</li>
+            <li><b>Przyciski operacji</b> — dodawanie, eksport, import, czyszczenie logu.</li>
+            <li><b>Pole wyszukiwania</b> — filtruje tabelę wpisów.</li>
+            <li><b>Tabela wpisów</b> — lista wszystkich nasłuchów, edytowalna bezpośrednio w komórkach.</li>
+        </ul>
+
+        <h2 id="dodawanie">3. Dodawanie nowego nasłuchu</h2>
+        <p>Wypełnij formularz i kliknij przycisk <span class="przycisk p-add">➕ Dodaj wpis</span>.</p>
+
+        <h3>Opis pól formularza</h3>
+        <table>
+            <tr>
+                <th style="width:180px">Pole</th>
+                <th>Opis</th>
+            </tr>
+            <tr>
+                <td><b>Pasmo</b></td>
+                <td>Wybór z listy: <code>SW</code>, <code>MW</code>, <code>LW</code>, <code>FM</code>.</td>
+            </tr>
+            <tr>
+                <td><b>Częstotliwość (kHz)</b></td>
+                <td>Cyfry, opcjonalnie kropka lub przecinek dziesiętny. <b>Wymagany wpis</b>.</td>
+            </tr>
+            <tr>
+                <td><b>Stacja</b></td>
+                <td>Nazwa stacji lub jej identyfikator. <b>Wymagany wpis</b>.</td>
+            </tr>
+            <tr>
+                <td><b>Kraj</b></td>
+                <td>Kraj nadawania (opcjonalne).</td>
+            </tr>
+            <tr>
+                <td><b>Język</b></td>
+                <td>Język audycji (opcjonalne).</td>
+            </tr>
+            <tr>
+                <td><b>SINPO</b></td>
+                <td>Dokładnie 5 cyfr od 1 do 5 (np. <code>45444</code>). <b>Wymagany wpis</b>
+            </tr>
+            <tr>
+                <td><b>Odbiornik</b></td>
+                <td>Model odbiornika (opcjonalne).</td>
+            </tr>
+            <tr>
+                <td><b>Antena</b></td>
+                <td>Rodzaj użytej anteny (opcjonalne).</td>
+            </tr>
+            <tr>
+                <td><b>Uwagi</b></td>
+                <td>Dowolny opis: warunki propagacyjne, fading, zakłócenia, treść programu itp.</td>
+            </tr>
+        </table>
+
+        <div class="info">
+            💡 Data i czas UTC są dopisywane automatycznie w momencie kliknięcia
+            <b>Dodaj wpis</b>.
+        </div>
+
+        <h2 id="sinpo">4. Skala SINPO</h2>
+        <p>
+            SINPO to standardowa skala oceny jakości odbioru radiowego, używana w nasłuchach DX.
+            Każda z pięciu cyfr oznacza ocenę w skali 1–5 (5 = najlepiej).
+        </p>
+
+        <table>
+            <tr>
+                <th style="width:50px">Litera</th>
+                <th style="width:180px">Znaczenie</th>
+                <th>Ocena 1-5</th>
+            </tr>
+
+            <tr>
+                <td><b>S</b></td>
+                <td>Siła sygnału (Signal strength)</td>
+                <td>
+                    1 = bardzo słaby<br>
+                    2 = słaby<br>
+                    3 = dostateczny<br>
+                    4 = dobry<br>
+                    5 = bardzo silny
+                </td>
+            </tr>
+
+            <tr>
+                <td><b>I</b></td>
+                <td>Zakłócenia (Interference)</td>
+                <td>
+                    1 = bardzo silne zakłócenia<br>
+                    2 = silne zakłócenia<br>
+                    3 = umiarkowane zakłócenia<br>
+                    4 = niewielkie zakłócenia<br>
+                    5 = brak zakłóceń
+                </td>
+            </tr>
+
+            <tr>
+                <td><b>N</b></td>
+                <td>Szumy (Noise)</td>
+                <td>
+                    1 = bardzo silne szumy<br>
+                    2 = silne szumy<br>
+                    3 = średnie szumy<br>
+                    4 = niewielkie szumy<br>
+                    5 = brak szumów
+                </td>
+            </tr>
+
+            <tr>
+                <td><b>P</b></td>
+                <td>Propagacja / zanikanie (Propagation)</td>
+                <td>
+                    1 = bardzo silny fading<br>
+                    2 = silny fading<br>
+                    3 = umiarkowany fading<br>
+                    4 = niewielki fading<br>
+                    5 = brak zauważalnego fadingu
+                </td>
+            </tr>
+
+            <tr>
+                <td><b>O</b></td>
+                <td>Ocena ogólna (Overall merit)</td>
+                <td>
+                    1 = nieczytelny odbiór<br>
+                    2 = bardzo słaby odbiór<br>
+                    3 = zadowalający odbiór<br>
+                    4 = dobry odbiór<br>
+                    5 = doskonały odbiór
+                </td>
+            </tr>
+        </table>
+
+        <p style="margin-top:15px">
+            Przykłady:
+        </p>
+        <ul>
+            <li><code>55555</code> — odbiór doskonały, jak z lokalnej stacji.</li>
+            <li><code>45444</code> — odbiór bardzo dobry, drobne zakłócenia.</li>
+            <li><code>33333</code> — odbiór przeciętny, słyszalny ale z trudem.</li>
+            <li><code>25232</code> — odbiór słaby, wyraźne zakłócenia i szumy.</li>
+            <li><code>15111</code> — ledwo słyszalny sygnał w morzu szumu.</li>
+        </ul>
+
+        <h2 id="edycja">5. Edycja wpisów w tabeli</h2>
+        <p>
+            Wszystkie komórki tabeli (poza kolumną <i>Operacje</i>) są <b>edytowalne bezpośrednio</b>.
+            Wystarczy kliknąć w komórkę, zmienić wartość i kliknąć poza nią lub nacisnąć
+            <span class="kbd">Enter</span>.
+        </p>
+
+        <p>Program automatycznie waliduje poprawność danych:</p>
+        <ul>
+            <li><b>Data</b> — musi być w formacie <code>RRRR-MM-DD</code> i być prawdziwą datą.</li>
+            <li><b>Czas</b> — musi być w formacie <code>GG:MM:SS</code> (24h).</li>
+            <li><b>Pasmo</b> — tylko <code>SW</code>, <code>MW</code>, <code>LW</code> lub <code>FM</code> (wielkość
+                liter nie ma znaczenia).</li>
+            <li><b>Częstotliwość</b> — tylko cyfry, opcjonalnie kropka lub przecinek.</li>
+            <li><b>SINPO</b> — dokładnie 5 cyfr z zakresu 1–5.</li>
+        </ul>
+
+        <div class="info">
+            💡 Jeśli wprowadzisz niepoprawną wartość, program wyświetli komunikat i przywróci
+            poprzednią zawartość komórki.
+        </div>
+
+        <h2 id="uwagi">6. Podgląd uwag</h2>
+        <p>
+            Uwagi do wpisu (oraz pełne dane: odbiornik, antena, SINPO, data, czas, pasmo, częstotliwość)
+            można obejrzeć klikając przycisk <span class="przycisk p-note">📝 Uwagi</span> w kolumnie
+            <i>Operacje</i>. Otwiera się okno z podglądem, które zamykasz przyciskiem <b>Zamknij</b>.
+        </p>
+
+        <h2 id="szukanie">7. Wyszukiwanie wpisów</h2>
+        <p>
+            Pole <b>Szukaj...</b> filtruje tabelę na bieżąco podczas pisania. Wyszukiwanie
+            obejmuje <b>wszystkie pola</b> wpisu (stacja, kraj, język, uwagi, częstotliwość itp.),
+            bez rozróżniania wielkości liter.
+        </p>
+        <p>
+            Przykłady:
+        </p>
+        <ul>
+            <li><code>polska</code> — wpisy dotyczące polskich stacji, języka polskiego lub uwag zawierających to słowo.
+            </li>
+            <li><code>6000</code> — wpisy z częstotliwością zawierającą 6000.</li>
+            <li><code>45444</code> — wpisy z konkretną oceną SINPO.</li>
+        </ul>
+
+        <h2 id="eksport">8. Eksport i import CSV</h2>
+
+        <h3>Eksport</h3>
+        <p>
+            Kliknij <span class="przycisk p-csv">💾 Eksport CSV</span>, aby pobrać cały log
+            jako plik <code>Broadcast_DX_Log.csv</code>.
+        </p>
+        <ul>
+            <li>Plik zawiera BOM UTF-8, więc poprawnie otwiera się w Excelu i LibreOffice.</li>
+            <li>Separator kolumn: przecinek. Tekst w cudzysłowach.</li>
+            <li>Kolejność kolumn:
+                <code>DataUTC, CzasUTC, Pasmo, Czestotliwosc, Stacja, Kraj, Jezyk, SINPO, Odbiornik, Antena, Uwagi</code>.
+            </li>
+        </ul>
+
+        <div class="sukces">
+            ✅ <b>Zalecenie:</b> po każdej sesji nasłuchowej wykonaj eksport CSV. To jedyna
+            skuteczna kopia zapasowa Twojego logu.
+        </div>
+
+        <h3>Import</h3>
+        <p>
+            Kliknij <span class="przycisk p-import">📂 Import CSV</span> i wybierz wcześniej
+            wyeksportowany plik.
+        </p>
+        <ul>
+            <li>Import <b>nadpisuje</b> cały aktualny log.</li>
+            <li>Pierwszy wiersz traktowany jest jako nagłówek i pomijany.</li>
+            <li>Wymagany układ kolumn taki, jak w eksporcie.</li>
+        </ul>
+
+        <div class="warning">
+            ⚠️ Import zastępuje wszystkie aktualnie zapisane wpisy. Przed importem wykonaj
+            eksport obecnego logu, jeśli chcesz go zachować.
+        </div>
+
+        <h2 id="usuwanie">9. Usuwanie wpisów</h2>
+        <ul>
+            <li>
+                <span class="przycisk p-del">🗑 Usuń</span> przy pojedynczym wpisie —
+                usuwa tylko ten jeden wiersz (po potwierdzeniu).
+            </li>
+            <li>
+                <span class="przycisk p-clear">🗑 Usuń cały log</span> — czyści wszystkie
+                wpisy z pamięci przeglądarki (po potwierdzeniu).
+            </li>
+        </ul>
+
+        <div class="warning">
+            ⚠️ Usuniętych wpisów <b>nie da się odzyskać</b>. Jeśli log jest dla Ciebie cenny,
+            zrób eksport CSV przed operacją czyszczenia.
+        </div>
+
+        <h2 id="wskazowki">10. Wskazówki i uwagi końcowe</h2>
+
+        <h3>Format czasu</h3>
+        <p>
+            Wszystkie czasy w logu zapisywane są w <b>UTC</b>. Nigdy nie zapisuj czasu lokalnego —
+            utrudnia to porównywanie nasłuchów z innymi słuchaczami na świecie.
+        </p>
+
+        <h3>Gdzie przechowywane są dane</h3>
+        <p>
+            Dane trzymane są w <code>localStorage</code> przeglądarki pod kluczem
+            <code>broadcastDXLog</code>. Są one widoczne tylko w tej przeglądarce i na tym
+            urządzeniu. Oznacza to m.in., że:
+        </p>
+        <ul>
+            <li>Otwarcie pliku HTML w innej przeglądarce → pusty log.</li>
+            <li>Tryb prywatny / incognito → dane giną po zamknięciu okna.</li>
+            <li>Czyszczenie danych przeglądarki → utrata logu.</li>
+            <li>Zmiana komputera → log nie przenosi się automatycznie.</li>
+        </ul>
+
+        <h3>Backup</h3>
+        <p>
+            Najprostsza strategia bezpieczeństwa:
+        </p>
+        <ol>
+            <li>Po każdej sesji nasłuchowej: <b>Eksport CSV</b>.</li>
+            <li>Plik CSV trzymaj w chmurze lub na dysku zewnętrznym.</li>
+            <li>Przy nowym komputerze / przeglądarce: <b>Import CSV</b>.</li>
+        </ol>
+
+        <h3>Zgodność z innymi logami</h3>
+        <p>
+            Układ kolumn CSV jest zgodny z typowymi arkuszami DX-owymi, więc plik można otworzyć
+            w Excelu / LibreOffice Calc i dalej obrabiać (sortowanie, filtry, wykresy).
+        </p>
+
+        <h3>Zakres pasm (orientacyjnie)</h3>
+        <table>
+            <tr>
+                <th style="width:80px">Pasmo</th>
+                <th style="width:150px">Zakres</th>
+                <th>Uwagi</th>
+            </tr>
+            <tr>
+                <td><b>LW</b></td>
+                <td>148,5 – 285 kHz</td>
+                <td>Fale długie, głównie Europa (obecnie w zaniku).</td>
+            </tr>
+            <tr>
+                <td><b>MW</b></td>
+                <td>526,5 – 1606,5 kHz</td>
+                <td>Fale średnie, silne stacje lokalne i regionalne.</td>
+            </tr>
+            <tr>
+                <td><b>SW</b></td>
+                <td>2,3 – 26,1 MHz</td>
+                <td>Fale krótkie, stacje międzykontynentalne, propagacja zależna od godzin.</td>
+            </tr>
+            <tr>
+                <td><b>FM</b></td>
+                <td>87,5 – 108 MHz</td>
+                <td>UKF, zasięg przeważnie do 100 km (poza tropo i sporadykami E).</td>
+            </tr>
+        </table>
+
+        <div class="sukces">
+            ✅ Powodzenia w nasłuchach i <b>73 de Sławek</b>!
+        </div>
+
+        <div class="footer">
+            Broadcast DX Logger v0.9 | Copyright © Sławek Kuchowicz
+        </div>
+
+    </div>
+
+</body>
+
+</html>

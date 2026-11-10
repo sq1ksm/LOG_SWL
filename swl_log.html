@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broadcast DX Logger</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #eef2f6;
+            margin: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
+        }
+
+        h1 {
+            margin: 0;
+            color: #1e3a5f;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .utc {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0a7d32;
+        }
+
+        .opis {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .warning {
+            font-size: 12px;
+            color: #cc0000;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .counter {
+            margin: 15px 0;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .buttons {
+            margin-top: 15px;
+        }
+
+        button {
+            border: none;
+            border-radius: 5px;
+            padding: 9px 14px;
+            cursor: pointer;
+            color: white;
+            margin: 2px;
+        }
+
+        .btnAdd {
+            background: #28a745;
+        }
+
+        .btnCsv {
+            background: #007bff;
+        }
+
+        .btnImport {
+            background: #6c757d;
+        }
+
+        .btnClear {
+            background: #dc3545;
+        }
+
+        .search {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background: #1e3a5f;
+            color: white;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 6px;
+        }
+
+        tr:nth-child(even) {
+            background: #f7f7f7;
+        }
+
+        td[contenteditable="true"] {
+            background: #fffceb;
+        }
+
+        td[contenteditable="true"]:focus {
+            outline: 2px solid #007bff;
+        }
+
+        .delBtn {
+            background: #dc3545;
+        }
+
+        .noteBtn {
+            background: #17a2b8;
+        }
+
+        #uwagiBox {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            background: #fafafa;
+            border-radius: 6px;
+            white-space: pre-wrap;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .small {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+
+            <div>
+
+                <h1>📻 Broadcast DX Logger</h1>
+
+                <div class="opis">
+                    Lokalny dziennik nasłuchów radiowych LW / MW / SW / FM
+                </div>
+
+                <div class="warning">
+                    Uwaga: Zmiany są zapisywane lokalnie w przeglądarce. Po edycji danych zalecany jest eksport logu do
+                    pliku CSV.
+                </div>
+
+            </div>
+
+            <div id="utcClock" class="utc">
+                UTC: --:--:--
+            </div>
+
+        </div>
+
+        <div class="counter">
+            Liczba nasłuchów:
+            <span id="licznik">0</span>
+        </div>
+
+        <div class="grid">
+
+            <div>
+                <label>Pasmo</label>
+                <select id="pasmo">
+                    <option>SW</option>
+                    <option>MW</option>
+                    <option>LW</option>
+                    <option>FM</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Częstotliwość (kHz)</label>
+                <input type="text" id="freq">
+            </div>
+
+            <div>
+                <label>Stacja</label>
+                <input type="text" id="stacja">
+            </div>
+
+            <div>
+                <label>Kraj</label>
+                <input type="text" id="kraj">
+            </div>
+
+            <div>
+                <label>Język</label>
+                <input type="text" id="jezyk">
+            </div>
+
+            <div>
+                <label>SINPO</label>
+                <input type="text" id="sinpo" maxlength="5" placeholder="45444">
+
+                <div class="small">
+                    Dokładnie 5 cyfr od 1 do 5
+                </div>
+
+            </div>
+
+            <div>
+                <label>Odbiornik</label>
+                <input type="text" id="odbiornik">
+            </div>
+
+            <div>
+                <label>Antena</label>
+                <input type="text" id="antena">
+            </div>
+
+        </div>
+
+        <div style="margin-top:15px">
+            <label>Uwagi</label>
+
+            <textarea id="uwagi" placeholder="Opis odbioru, fading, zakłócenia, program..."></textarea>
+
+        </div>
+
+        <div class="buttons">
+
+            <button class="btnAdd" onclick="dodajWpis()">
+                ➕ Dodaj wpis
+            </button>
+
+            <button class="btnCsv" onclick="eksportCSV()">
+                💾 Eksport CSV
+            </button>
+
+            <button class="btnImport" onclick="document.getElementById('importCSV').click()">
+                📂 Import CSV
+            </button>
+            <button class="btnImport" onclick="window.open('help.html','_blank')">
+                ❓ Pomoc
+            </button>
+            <button class="btnClear" onclick="usunWszystko()">
+                🗑 Usuń cały log
+            </button>
+
+            <input type="file" id="importCSV" accept=".csv" style="display:none">
+
+        </div>
+
+        <div class="search">
+
+            <input type="text" id="szukaj" placeholder="Szukaj..." onkeyup="pokazTabele()">
+
+        </div>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th style="width:90px">Data UTC</th>
+                    <th style="width:70px">Czas UTC</th>
+                    <th style="width:50px">Pasmo</th>
+                    <th style="width:90px">kHz</th>
+                    <th>Stacja</th>
+                    <th style="width:80px">SINPO</th>
+                    <th style="width:140px">Kraj</th>
+                    <th style="width:140px">Język</th>
+                    <th style="width:175px">Operacje</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="tabela">
+            </tbody>
+
+        </table>
+
+        <div id="uwagiBox"></div>
+
+        <div class="footer">
+            Broadcast DX Logger v0.9| Copyright © Sławek Kuchowicz
+        </div>
+        <div id="modal" style="display:none;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.5);
+            z-index:9999;">
+
+            <div style="
+        background:white;
+        max-width:700px;
+        margin:80px auto;
+        padding:20px;
+        border-radius:10px;">
+
+                <h3>Szczegóły wpisu</h3>
+
+                <div id="modalContent"></div>
+
+                <br>
+
+                <button onclick="zamknijModal()" class="delBtn">
+                    Zamknij
+                </button>
+
+            </div>
+
+        </div>
+        <script>
+
+            // ---------------------------------------------------------
+            // GŁÓWNY STAN APLIKACJI
+            // Wczytanie logu z localStorage (lub pusta tablica, jeśli brak)
+            // ---------------------------------------------------------
+            let log =
+                JSON.parse(
+                    localStorage.getItem("broadcastDXLog")
+                ) || [];
+
+            // ---------------------------------------------------------
+            // ZEGAR UTC
+            // Odświeża wyświetlanie aktualnego czasu UTC co sekundę
+            // ---------------------------------------------------------
+            function aktualizujUTC() {
+
+                const d = new Date();
+
+                const h =
+                    String(d.getUTCHours()).padStart(2, "0");
+
+                const m =
+                    String(d.getUTCMinutes()).padStart(2, "0");
+
+                const s =
+                    String(d.getUTCSeconds()).padStart(2, "0");
+
+                document.getElementById("utcClock")
+                    .textContent =
+                    `UTC: ${h}:${m}:${s}`;
+
+            }
+
+            setInterval(aktualizujUTC, 1000);
+            aktualizujUTC();
+
+            // ---------------------------------------------------------
+            // WALIDACJA NA BIEŻĄCO
+            // Pole SINPO - dopuszczamy tylko cyfry 1-5
+            // ---------------------------------------------------------
+            document
+                .getElementById("sinpo")
+                .addEventListener("input", function () {
+
+                    this.value =
+                        this.value.replace(/[^1-5]/g, "");
+
+                });
+
+            // Pole częstotliwości - tylko cyfry, kropka i przecinek
+            document
+                .getElementById("freq")
+                .addEventListener("input", function () {
+
+                    this.value =
+                        this.value.replace(/[^0-9.,]/g, "");
+
+                });
+
+            // ---------------------------------------------------------
+            // ZAPIS DO LOCALSTORAGE
+            // Zapisuje log i odświeża licznik wpisów
+            // ---------------------------------------------------------
+            function zapisz() {
+
+                localStorage.setItem(
+                    "broadcastDXLog",
+                    JSON.stringify(log)
+                );
+
+                document.getElementById(
+                    "licznik"
+                ).textContent = log.length;
+
+            }
+
+            // ---------------------------------------------------------
+            // POMOCNICZA FUNKCJA - POBIERANIE AKTUALNEJ DATY/CZASU UTC
+            // Zwraca obiekt { data: "YYYY-MM-DD", czas: "HH:MM:SS" }
+            // ---------------------------------------------------------
+            function pobierzUTC() {
+
+                const d = new Date();
+
+                return {
+
+                    data:
+                        d.toISOString()
+                            .slice(0, 10),
+
+                    czas:
+                        d.toISOString()
+                            .slice(11, 19)
+
+                };
+
+            }
+
+            // ---------------------------------------------------------
+            // DODAWANIE NOWEGO WPISU
+            // Waliduje SINPO, częstotliwość i stację, potem dodaje wpis
+            // i czyści formularz
+            // ---------------------------------------------------------
+            function dodajWpis() {
+
+                const sinpo =
+                    document.getElementById("sinpo")
+                        .value
+                        .trim();
+
+                if (!/^[1-5]{5}$/.test(sinpo)) {
+
+                    alert(
+                        "SINPO musi zawierać dokładnie 5 cyfr od 1 do 5."
+                    );
+
+                    return;
+                }
+
+                const utc =
+                    pobierzUTC();
+                if (
+                    document.getElementById("freq").value.trim() === ""
+                ) {
+                    alert("Podaj częstotliwość.");
+                    return;
+                }
+
+                if (
+                    document.getElementById("stacja").value.trim() === ""
+                ) {
+                    alert("Podaj nazwę stacji.");
+                    return;
+                }
+
+                log.push({
+
+                    data: utc.data,
+
+                    czas: utc.czas,
+
+                    pasmo:
+                        document.getElementById("pasmo").value,
+
+                    freq:
+                        document.getElementById("freq").value,
+
+                    stacja:
+                        document.getElementById("stacja").value,
+
+                    kraj:
+                        document.getElementById("kraj").value,
+
+                    jezyk:
+                        document.getElementById("jezyk").value,
+
+                    sinpo:
+
+                        document.getElementById("sinpo").value,
+
+                    odbiornik:
+
+                        document.getElementById("odbiornik").value,
+
+                    antena:
+
+                        document.getElementById("antena").value,
+
+                    uwagi:
+
+                        document.getElementById("uwagi").value
+
+                });
+
+                document.getElementById("freq").value = "";
+                document.getElementById("stacja").value = "";
+                document.getElementById("kraj").value = "";
+                document.getElementById("jezyk").value = "";
+                document.getElementById("sinpo").value = "";
+                document.getElementById("uwagi").value = "";
+
+                zapisz();
+
+                pokazTabele();
+
+            }
+
+            // ---------------------------------------------------------
+            // BLOKADA ENTER W KOMÓRKACH EDYTOWALNYCH
+            // Enter kończy edycję (blur) zamiast dodawać nową linię
+            // ---------------------------------------------------------
+            function blokujEnter(e) {
+
+                if (e.key === "Enter") {
+
+                    e.preventDefault();
+
+                    e.target.blur();
+
+                    return false;
+                }
+
+                return true;
+            }
+
+            // ---------------------------------------------------------
+            // RENDEROWANIE TABELI
+            // Sortuje wpisy od najnowszych, filtruje po frazie w wyszukiwarce
+            // i buduje wiersze z edytowalnymi komórkami oraz przyciskami
+            // ---------------------------------------------------------
+            function pokazTabele() {
+
+                const tabela =
+                    document.getElementById("tabela");
+
+                tabela.innerHTML = "";
+
+                const filtr =
+                    document.getElementById("szukaj")
+                        .value
+                        .toLowerCase();
+                log.sort((a, b) => {
+
+                    const dataA =
+                        new Date(a.data + "T" + a.czas);
+
+                    const dataB =
+                        new Date(b.data + "T" + b.czas);
+
+                    return dataB - dataA;
+
+                });
+                log.forEach((r, index) => {
+
+                    const txt =
+                        JSON.stringify(r)
+                            .toLowerCase();
+
+                    if (!txt.includes(filtr))
+                        return;
+
+                    tabela.innerHTML += `
+
+        <tr>
+
+       <td contenteditable="true"
+           onkeydown="return blokujEnter(event)"
+            onblur="edytujPole(${index},'data',this.innerText)">
+            ${r.data}
+        </td>
+
+       <td contenteditable="true"
+           onkeydown="return blokujEnter(event)"
+            onblur="edytujPole(${index},'czas',this.innerText)">
+            ${r.czas}
+        </td>
+
+        <td contenteditable="true"
+            onkeydown="return blokujEnter(event)"
+            onblur="edytujPole(${index},'pasmo',this.innerText)">
+            ${r.pasmo}
+        </td>
+
+        <td contenteditable="true"
+            onkeydown="return blokujEnter(event)"
+            onblur="edytujPole(${index},'freq',this.innerText)">
+            ${isNaN(Number(r.freq))
+                            ? r.freq
+                            : Number(r.freq).toLocaleString('pl-PL')}
+        </td>
+
+        <td contenteditable="true"
+    onkeydown="return blokujEnter(event)"
+    onblur="edytujPole(${index},'stacja',this.innerText)">
+    ${r.stacja}
+</td>
+
+        <td contenteditable="true"
+            onkeydown="return blokujEnter(event)"
+            onblur="edytujPole(${index},'sinpo',this.innerText)">
+            ${r.sinpo}
+        </td>
+
+        <td contenteditable="true"
+            onkeydown="return blokujEnter(event)"
+            onblur="edytujPole(${index},'kraj',this.innerText)">
+            ${r.kraj}
+        </td>
+
+        <td contenteditable="true"
+            onkeydown="return blokujEnter(event)"
+            onblur="edytujPole(${index},'jezyk',this.innerText)">
+            ${r.jezyk}
+        </td>
+
+        <td>
+
+        <button
+        class="noteBtn"
+        onclick="pokazUwagi(${index})">
+        📝 Uwagi
+        </button>
+
+        <button
+        class="delBtn"
+        onclick="usun(${index})">
+        🗑 Usuń
+        </button>
+
+        </td>
+
+        </tr>
+
+        `;
+
+                });
+
+            }
+
+            // ---------------------------------------------------------
+            // EDYCJA POLA Z TABELI
+            // Waliduje wartość zależnie od kolumny i zapisuje ją w logu
+            // ---------------------------------------------------------
+            function edytujPole(
+                index,
+                pole,
+                wartosc
+            ) {
+
+                wartosc = wartosc.trim();
+                if (pole === "data") {
+
+                    const dataTest = new Date(wartosc);
+
+                    if (
+                        isNaN(dataTest.getTime()) ||
+                        dataTest.toISOString().slice(0, 10) !== wartosc
+                    ) {
+
+                        alert("Niepoprawna data.");
+
+                        pokazTabele();
+
+                        return;
+                    }
+                }
+
+
+                if (pole === "czas") {
+
+                    if (
+                        !/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/
+                            .test(wartosc)
+                    ) {
+
+                        alert("Niepoprawny czas.");
+
+                        pokazTabele();
+
+                        return;
+                    }
+                }
+                if (pole === "pasmo") {
+
+                    wartosc = wartosc.toUpperCase();
+
+                    const dozwolone =
+                        ["SW", "MW", "LW", "FM"];
+
+                    if (!dozwolone.includes(wartosc)) {
+
+                        alert(
+                            "Pasmo musi być: SW, MW, LW lub FM."
+                        );
+
+                        pokazTabele();
+
+                        return;
+                    }
+                }
+                if (pole === "sinpo") {
+
+                    if (!/^[1-5]{5}$/.test(wartosc)) {
+
+                        alert(
+                            "SINPO musi mieć format np. 45444"
+                        );
+
+                        pokazTabele();
+
+                        return;
+                    }
+                }
+
+                if (pole === "freq") {
+
+                    if (!/^[0-9]+([.,][0-9]+)?$/.test(wartosc)) {
+
+                        alert(
+                            "Częstotliwość może zawierać tylko cyfry oraz opcjonalnie kropkę lub przecinek."
+                        );
+
+                        pokazTabele();
+
+                        return;
+                    }
+                }
+
+                log[index][pole] =
+                    wartosc;
+
+                zapisz();
+
+            }
+
+            // ---------------------------------------------------------
+            // MODAL ZE SZCZEGÓŁAMI WPISU
+            // Pokazuje pełne dane wpisu łącznie z uwagami
+            // ---------------------------------------------------------
+            function pokazUwagi(index) {
+
+                document.getElementById("modal").style.display = "block";
+
+                document.getElementById("modalContent").innerHTML =
+
+                    "<b>Stacja:</b> " +
+                    (log[index].stacja || "(brak)") +
+
+                    "<br>" +
+
+                    log[index].data +
+                    " " +
+                    log[index].czas +
+
+                    "<br>" +
+
+                    log[index].pasmo +
+                    " - " +
+                    log[index].freq +
+                    " kHz" +
+
+                    "<br>" +
+
+                    "<b>SINPO:</b> " +
+                    log[index].sinpo +
+
+                    "<br>" +
+
+                    (log[index].odbiornik || "-") +
+                    ", " +
+                    (log[index].antena || "-") +
+
+                    "<br><br>" +
+
+                    "<b>Uwagi:</b><br>" +
+
+                    (log[index].uwagi || "(brak uwag)");
+
+            }
+
+            // Zamknięcie okna modalnego
+            function zamknijModal() {
+
+                document.getElementById("modal").style.display = "none";
+
+            }
+
+            // ---------------------------------------------------------
+            // USUWANIE POJEDYNCZEGO WPISU
+            // ---------------------------------------------------------
+            function usun(index) {
+
+                if (
+                    !confirm(
+                        "Usunąć wpis?"
+                    )
+                )
+                    return;
+
+                log.splice(index, 1);
+
+                zapisz();
+
+                pokazTabele();
+
+            }
+
+            // ---------------------------------------------------------
+            // CZYSZCZENIE CAŁEGO LOGU
+            // ---------------------------------------------------------
+            function usunWszystko() {
+
+                if (
+                    !confirm(
+                        "Usunąć cały log?"
+                    )
+                )
+                    return;
+
+                log = [];
+
+                zapisz();
+
+                pokazTabele();
+
+                document
+                    .getElementById("uwagiBox")
+                    .style.display = "none";
+
+            }
+
+            // ---------------------------------------------------------
+            // EKSPORT DO CSV
+            // Buduje plik CSV (z BOM dla Excela) i pobiera go
+            // ---------------------------------------------------------
+            function eksportCSV() {
+
+                let csv =
+                    "DataUTC,CzasUTC,Pasmo,Czestotliwosc,Stacja,Kraj,Jezyk,SINPO,Odbiornik,Antena,Uwagi\n";
+
+                log.forEach(r => {
+
+                    csv +=
+
+                        `"${r.data}","${r.czas}","${r.pasmo}","${r.freq}","${r.stacja}","${r.kraj}","${r.jezyk}","${r.sinpo}","${r.odbiornik}","${r.antena}","${r.uwagi.replace(/"/g, '""')}"\n`;
+
+                });
+
+                const blob =
+                    new Blob(
+                        ["\uFEFF" + csv],
+                        {
+                            type:
+                                "text/csv;charset=utf-8;"
+                        }
+                    );
+
+                const a =
+                    document.createElement("a");
+
+                a.href =
+                    URL.createObjectURL(blob);
+
+                a.download =
+                    "Broadcast_DX_Log.csv";
+
+                a.click();
+
+            }
+
+            // ---------------------------------------------------------
+            // IMPORT Z PLIKU CSV
+            // Wczytuje plik, parsuje wiersze i nadpisuje cały log
+            // ---------------------------------------------------------
+            document
+                .getElementById("importCSV")
+                .addEventListener(
+                    "change",
+                    function (e) {
+
+                        const file = e.target.files[0];
+
+                        if (!file) return;
+
+                        const reader = new FileReader();
+
+                        reader.onload = function (event) {
+
+                            const text = event.target.result;
+
+                            const lines =
+                                text.trim().split("\n");
+
+                            log = [];
+
+                            for (let i = 1; i < lines.length; i++) {
+
+                                let cols =
+                                    lines[i]
+                                        .match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+
+                                if (!cols) continue;
+
+                                cols =
+                                    cols.map(x =>
+                                        x.replace(/^"/, "")
+                                            .replace(/"$/, "")
+                                    );
+
+                                log.push({
+
+                                    data: cols[0] || "",
+                                    czas: cols[1] || "",
+                                    pasmo: cols[2] || "",
+                                    freq: cols[3] || "",
+                                    stacja: cols[4] || "",
+                                    kraj: cols[5] || "",
+                                    jezyk: cols[6] || "",
+                                    sinpo: cols[7] || "",
+                                    odbiornik: cols[8] || "",
+                                    antena: cols[9] || "",
+                                    uwagi: cols[10] || ""
+
+                                });
+
+                            }
+
+                            zapisz();
+
+                            pokazTabele();
+
+                            alert(
+                                "Zaimportowano " +
+                                log.length +
+                                " wpisów."
+                            );
+
+                        };
+
+                        reader.readAsText(
+                            file,
+                            "UTF-8"
+                        );
+
+                    }
+                );
+
+            // ---------------------------------------------------------
+            // INICJALIZACJA
+            // Zapis stanu i pierwsze wyrenderowanie tabeli
+            // ---------------------------------------------------------
+            zapisz();
+            pokazTabele();
+        </script>
+
+</body>
+
+</html>
