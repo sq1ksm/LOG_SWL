@@ -64,7 +64,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 12px;
         }
 
@@ -216,17 +216,6 @@
         </div>
 
         <div class="grid">
-
-            <div>
-                <label>Pasmo</label>
-                <select id="pasmo">
-                    <option>SW</option>
-                    <option>MW</option>
-                    <option>LW</option>
-                    <option>FM</option>
-                </select>
-            </div>
-
             <div>
                 <label>Częstotliwość (kHz)</label>
                 <input type="text" id="freq">
@@ -254,8 +243,10 @@
                 <div class="small">
                     Dokładnie 5 cyfr od 1 do 5
                 </div>
-
             </div>
+        </div>
+
+        <div class="grid" style="margin-top:10px;">
 
             <div>
                 <label>Odbiornik</label>
@@ -279,21 +270,21 @@
         <div class="buttons">
 
             <button class="btnAdd" onclick="dodajWpis()">
-                ➕ Dodaj wpis
+                Dodaj wpis
             </button>
 
             <button class="btnCsv" onclick="eksportCSV()">
-                💾 Eksport CSV
+                Eksport CSV
             </button>
 
             <button class="btnImport" onclick="document.getElementById('importCSV').click()">
-                📂 Import CSV
+                Import CSV
             </button>
             <button class="btnImport" onclick="window.open('help.html','_blank')">
-                ❓ Pomoc
+                Pomoc
             </button>
             <button class="btnClear" onclick="usunWszystko()">
-                🗑 Usuń cały log
+                Usuń cały log
             </button>
 
             <input type="file" id="importCSV" accept=".csv" style="display:none">
@@ -313,13 +304,13 @@
                 <tr>
                     <th style="width:90px">Data UTC</th>
                     <th style="width:70px">Czas UTC</th>
-                    <th style="width:50px">Pasmo</th>
                     <th style="width:90px">kHz</th>
                     <th>Stacja</th>
                     <th style="width:80px">SINPO</th>
-                    <th style="width:140px">Kraj</th>
-                    <th style="width:140px">Język</th>
-                    <th style="width:175px">Operacje</th>
+                    <th style="width:120px">Kraj</th>
+                    <th style="width:120px">Język</th>
+                    <th style="width:65px">QSL</th>
+                    <th style="width:120px">Operacje</th>
                 </tr>
 
             </thead>
@@ -502,38 +493,23 @@
                 log.push({
 
                     data: utc.data,
-
                     czas: utc.czas,
-
-                    pasmo:
-                        document.getElementById("pasmo").value,
-
                     freq:
                         document.getElementById("freq").value,
-
                     stacja:
                         document.getElementById("stacja").value,
-
                     kraj:
                         document.getElementById("kraj").value,
-
                     jezyk:
                         document.getElementById("jezyk").value,
-
                     sinpo:
-
                         document.getElementById("sinpo").value,
-
+                    qsl: "",
                     odbiornik:
-
                         document.getElementById("odbiornik").value,
-
                     antena:
-
                         document.getElementById("antena").value,
-
                     uwagi:
-
                         document.getElementById("uwagi").value
 
                 });
@@ -623,12 +599,6 @@
 
         <td contenteditable="true"
             onkeydown="return blokujEnter(event)"
-            onblur="edytujPole(${index},'pasmo',this.innerText)">
-            ${r.pasmo}
-        </td>
-
-        <td contenteditable="true"
-            onkeydown="return blokujEnter(event)"
             onblur="edytujPole(${index},'freq',this.innerText)">
             ${isNaN(Number(r.freq))
                             ? r.freq
@@ -658,19 +628,41 @@
             onblur="edytujPole(${index},'jezyk',this.innerText)">
             ${r.jezyk}
         </td>
+<td>
 
+<select
+    onchange="edytujQSL(${index},this.value)">
+
+    <option value=""
+        ${r.qsl === "" ? "selected" : ""}>
+        🔴
+    </option>
+
+    <option value="Wysłana"
+        ${r.qsl === "Wysłana" ? "selected" : ""}>
+        🟡
+    </option>
+
+    <option value="Otrzymana"
+        ${r.qsl === "Otrzymana" ? "selected" : ""}>
+        🟢
+    </option>
+
+</select>
+
+</td>
         <td>
 
         <button
         class="noteBtn"
         onclick="pokazUwagi(${index})">
-        📝 Uwagi
+        Uwagi
         </button>
 
         <button
         class="delBtn"
         onclick="usun(${index})">
-        🗑 Usuń
+        🗑
         </button>
 
         </td>
@@ -726,24 +718,7 @@
                         return;
                     }
                 }
-                if (pole === "pasmo") {
 
-                    wartosc = wartosc.toUpperCase();
-
-                    const dozwolone =
-                        ["SW", "MW", "LW", "FM"];
-
-                    if (!dozwolone.includes(wartosc)) {
-
-                        alert(
-                            "Pasmo musi być: SW, MW, LW lub FM."
-                        );
-
-                        pokazTabele();
-
-                        return;
-                    }
-                }
                 if (pole === "sinpo") {
 
                     if (!/^[1-5]{5}$/.test(wartosc)) {
@@ -760,10 +735,12 @@
 
                 if (pole === "freq") {
 
+                    wartosc = wartosc.replace(/\s/g, "");
+
                     if (!/^[0-9]+([.,][0-9]+)?$/.test(wartosc)) {
 
                         alert(
-                            "Częstotliwość może zawierać tylko cyfry oraz opcjonalnie kropkę lub przecinek."
+                            "Częstotliwość może zawierać tylko cyfry, spacje oraz opcjonalnie kropkę lub przecinek."
                         );
 
                         pokazTabele();
@@ -792,17 +769,12 @@
                     "<b>Stacja:</b> " +
                     (log[index].stacja || "(brak)") +
 
-                    "<br>" +
-
-                    log[index].data +
-                    " " +
-                    log[index].czas +
-
-                    "<br>" +
-
-                    log[index].pasmo +
                     " - " +
-                    log[index].freq +
+                    (
+                        isNaN(Number(log[index].freq))
+                            ? log[index].freq
+                            : Number(log[index].freq).toLocaleString('pl-PL')
+                    ) +
                     " kHz" +
 
                     "<br>" +
@@ -882,13 +854,13 @@
             function eksportCSV() {
 
                 let csv =
-                    "DataUTC,CzasUTC,Pasmo,Czestotliwosc,Stacja,Kraj,Jezyk,SINPO,Odbiornik,Antena,Uwagi\n";
+                    "DataUTC,CzasUTC,Czestotliwosc,Stacja,Kraj,Jezyk,SINPO,QSL,Odbiornik,Antena,Uwagi\n";
 
                 log.forEach(r => {
 
                     csv +=
 
-                        `"${r.data}","${r.czas}","${r.pasmo}","${r.freq}","${r.stacja}","${r.kraj}","${r.jezyk}","${r.sinpo}","${r.odbiornik}","${r.antena}","${r.uwagi.replace(/"/g, '""')}"\n`;
+                        `"${r.data}","${r.czas}","${r.freq}","${r.stacja}","${r.kraj}","${r.jezyk}","${r.sinpo}","${r.qsl}","${r.odbiornik}","${r.antena}","${r.uwagi.replace(/"/g, '""')}"\n`
 
                 });
 
@@ -918,78 +890,49 @@
             // IMPORT Z PLIKU CSV
             // Wczytuje plik, parsuje wiersze i nadpisuje cały log
             // ---------------------------------------------------------
-            document
-                .getElementById("importCSV")
-                .addEventListener(
-                    "change",
-                    function (e) {
+            document.getElementById("importCSV").addEventListener("change", function (e) {
+                const file = e.target.files[0];
+                if (!file) return;
 
-                        const file = e.target.files[0];
+                const reader = new FileReader();
 
-                        if (!file) return;
+                reader.onload = function (event) {
+                    const text = event.target.result;
+                    const lines = text.trim().split(/\r?\n/);
 
-                        const reader = new FileReader();
+                    log = [];
 
-                        reader.onload = function (event) {
+                    for (let i = 1; i < lines.length; i++) {
+                        let cols = lines[i].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+                        if (!cols) continue;
 
-                            const text = event.target.result;
-
-                            const lines =
-                                text.trim().split("\n");
-
-                            log = [];
-
-                            for (let i = 1; i < lines.length; i++) {
-
-                                let cols =
-                                    lines[i]
-                                        .match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
-
-                                if (!cols) continue;
-
-                                cols =
-                                    cols.map(x =>
-                                        x.replace(/^"/, "")
-                                            .replace(/"$/, "")
-                                    );
-
-                                log.push({
-
-                                    data: cols[0] || "",
-                                    czas: cols[1] || "",
-                                    pasmo: cols[2] || "",
-                                    freq: cols[3] || "",
-                                    stacja: cols[4] || "",
-                                    kraj: cols[5] || "",
-                                    jezyk: cols[6] || "",
-                                    sinpo: cols[7] || "",
-                                    odbiornik: cols[8] || "",
-                                    antena: cols[9] || "",
-                                    uwagi: cols[10] || ""
-
-                                });
-
-                            }
-
-                            zapisz();
-
-                            pokazTabele();
-
-                            alert(
-                                "Zaimportowano " +
-                                log.length +
-                                " wpisów."
-                            );
-
-                        };
-
-                        reader.readAsText(
-                            file,
-                            "UTF-8"
+                        cols = cols.map(x =>
+                            x.replace(/^"/, "").replace(/"$/, "")
                         );
 
+                        log.push({
+                            data: cols[0] || "",
+                            czas: cols[1] || "",
+                            freq: cols[2] || "",
+                            stacja: cols[3] || "",
+                            kraj: cols[4] || "",
+                            jezyk: cols[5] || "",
+                            sinpo: cols[6] || "",
+                            qsl: cols[7] || "",
+                            odbiornik: cols[8] || "",
+                            antena: cols[9] || "",
+                            uwagi: cols[10] || ""
+                        });
                     }
-                );
+
+                    zapisz();
+                    pokazTabele();
+                    alert("Zaimportowano " + log.length + " wpisów.");
+                    e.target.value = "";
+                };
+
+                reader.readAsText(file, "UTF-8");
+            });
 
             // ---------------------------------------------------------
             // INICJALIZACJA
@@ -997,6 +940,13 @@
             // ---------------------------------------------------------
             zapisz();
             pokazTabele();
+            function edytujQSL(index, wartosc) {
+
+                log[index].qsl = wartosc;
+
+                zapisz();
+
+            }
         </script>
 
 </body>
