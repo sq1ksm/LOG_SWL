@@ -8,22 +8,22 @@ Lokalny dziennik nasłuchów radiowych dla pasm **LW / MW / SW / FM** — dział
 
 ---
 
-## ✨ Funkcje
+## Funkcje
 
-- ➕ Dodawanie wpisów z formularza (częstotliwość, stacja, kraj, język, SINPO, odbiornik, antena, uwagi)
-- 🕒 Automatyczny **czas i data UTC** przy dodawaniu wpisu
-- 🔄 **Edytowanie wpisów bezpośrednio w tabeli** (klik → zmiana → Enter)
-- ✅ Walidacja na bieżąco: SINPO (5 cyfr 1–5), częstotliwość, data, czas
-- 📮 Status **QSL**: 🔴 brak / 🟡 wysłana / 🟢 otrzymana
-- 🔍 Wyszukiwanie na żywo we wszystkich polach
-- 💾 **Eksport / import CSV** (UTF-8 z BOM — otwiera się poprawnie w Excelu)
-- 📊 Licznik wpisów i zegar UTC w nagłówku
-- 📱 Responsywny layout (grid + auto-fit)
-- 🌐 Zero zależności — jeden plik HTML
+- Dodawanie wpisów z formularza (częstotliwość, stacja, kraj, język, SINPO, odbiornik, antena, uwagi)
+- Automatyczny **czas i data UTC** przy dodawaniu wpisu
+- **Edytowanie wpisów bezpośrednio w tabeli** (klik → zmiana → Enter)
+- Walidacja na bieżąco: SINPO (5 cyfr 1–5), częstotliwość, data, czas
+- Status **QSL**: 🔴 brak / 🟡 wysłana / 🟢 otrzymana
+- Wyszukiwanie na żywo we wszystkich polach
+- **Eksport / import CSV** (UTF-8 z BOM — otwiera się poprawnie w Excelu)
+- Licznik wpisów i zegar UTC w nagłówku
+- Responsywny layout (grid + auto-fit)
+- Zero zależności — jeden plik HTML
 
 ---
 
-## 🚀 Szybki start
+## Szybki start
 
 1. Pobierz plik `index.html` (oraz `help.html`, jeśli chcesz korzystać z przycisku *Pomoc*).
 2. Otwórz `index.html` w dowolnej nowoczesnej przeglądarce (Chrome, Firefox, Edge, Safari).
@@ -34,7 +34,7 @@ Lokalny dziennik nasłuchów radiowych dla pasm **LW / MW / SW / FM** — dział
 
 ---
 
-## 🧭 Opis interfejsu
+## Opis interfejsu
 
 ### Formularz wpisu
 
@@ -83,7 +83,7 @@ Data i czas UTC dodawane są **automatycznie** w chwili dodania wpisu.
 
 ---
 
-## 📁 Format pliku CSV
+## Format pliku CSV
 
 Kolumny (w tej kolejności):
 
@@ -101,7 +101,7 @@ DataUTC, CzasUTC, Czestotliwosc, Stacja, Kraj, Jezyk, SINPO, QSL, Odbiornik, Ant
 
 ---
 
-## 💾 Przechowywanie danych
+## Przechowywanie danych
 
 Wszystkie dane przechowywane są w **`localStorage`** przeglądarki pod kluczem `broadcastDXLog`.
 
@@ -114,7 +114,7 @@ Wszystkie dane przechowywane są w **`localStorage`** przeglądarki pod kluczem 
 
 ---
 
-## 📋 Zalecenia praktyczne
+## Zalecenia praktyczne
 
 1. **Eksportuj CSV** po każdej sesji nasłuchowej.
 2. Przed importem CSV **zrób kopię** aktualnego logu.
@@ -123,7 +123,7 @@ Wszystkie dane przechowywane są w **`localStorage`** przeglądarki pod kluczem 
 
 ---
 
-## 🗂️ Struktura projektu
+## Struktura projektu
 
 ```
 .
@@ -136,7 +136,7 @@ Wszystko zawarte jest w pojedynczych plikach HTML — brak zależności, brak `n
 
 ---
 
-## 🧪 Wsparcie przeglądarek
+## Wsparcie przeglądarek
 
 Aplikacja korzysta z:
 
@@ -150,7 +150,7 @@ Działa we wszystkich aktualnych wersjach Chrome, Firefox, Edge i Safari.
 
 ---
 
-## ⚠️ Znane ograniczenia
+## Znane ograniczenia
 
 - Dane trzymane są wyłącznie w `localStorage` — brak synchronizacji chmurowej.
 - Brak automatycznej kopii zapasowej — tylko ręczny eksport CSV.
@@ -158,7 +158,7 @@ Działa we wszystkich aktualnych wersjach Chrome, Firefox, Edge i Safari.
 
 ---
 
-## 📜 Licencja
+## Licencja
 
 Projekt udostępniany na licencji **MIT** — możesz go swobodnie używać, modyfikować i rozpowszechniać.
 
