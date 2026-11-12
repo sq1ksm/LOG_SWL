@@ -141,6 +141,12 @@
             padding: 6px;
         }
 
+        /* Wyrównanie kolumny kHz do prawej */
+        #tabela td:nth-child(3) {
+            text-align: right;
+            padding-right: 12px;
+        }
+
         tr:nth-child(even) {
             background: #f7f7f7;
         }
@@ -215,6 +221,14 @@
         <div class="counter">
             Liczba nasłuchów:
             <span id="licznik">0</span>
+
+            &nbsp;|&nbsp;
+            Kart odebranych:
+            <span id="licznikOdebranych">0</span>
+            , pozostało:
+            <span id="licznikWyslanych">0</span>
+
+
         </div>
 
         <div class="grid">
@@ -229,8 +243,8 @@
             </div>
 
             <div>
-                <label>Kraj</label>
-                <input type="text" id="kraj">
+                <label>Miejsce nadawania</label>
+                <input type="text" id="qth">
             </div>
 
             <div>
@@ -309,7 +323,7 @@
                     <th style="width:55px">kHz</th>
                     <th>Stacja</th>
                     <th style="width:80px">SINPO</th>
-                    <th style="width:120px">Kraj</th>
+                    <th style="width:120px">QTH</th>
                     <th style="width:120px">Język</th>
                     <th style="width:65px">QSL</th>
                     <th style="width:130px">Operacje</th>
@@ -412,6 +426,7 @@
 
             // ZAPIS DO LOCALSTORAGE
             // Zapisuje log i odświeża licznik wpisów
+
             function zapisz() {
 
                 localStorage.setItem(
@@ -419,9 +434,18 @@
                     JSON.stringify(log)
                 );
 
-                document.getElementById(
-                    "licznik"
-                ).textContent = log.length;
+                document.getElementById("licznik").textContent = log.length;
+
+                const wyslane = log.filter(
+                    r => r.qsl === "Wysłana"
+                ).length;
+
+                const odebrane = log.filter(
+                    r => r.qsl === "Otrzymana"
+                ).length;
+
+                document.getElementById("licznikWyslanych").textContent = wyslane;
+                document.getElementById("licznikOdebranych").textContent = odebrane;
 
             }
 
@@ -490,8 +514,8 @@
                         document.getElementById("freq").value,
                     stacja:
                         document.getElementById("stacja").value,
-                    kraj:
-                        document.getElementById("kraj").value,
+                    qth:
+                        document.getElementById("qth").value,
                     jezyk:
                         document.getElementById("jezyk").value,
                     sinpo:
@@ -508,7 +532,7 @@
 
                 document.getElementById("freq").value = "";
                 document.getElementById("stacja").value = "";
-                document.getElementById("kraj").value = "";
+                document.getElementById("qth").value = "";
                 document.getElementById("jezyk").value = "";
                 document.getElementById("sinpo").value = "";
                 document.getElementById("uwagi").value = "";
@@ -608,8 +632,8 @@
 
         <td contenteditable="true"
             onkeydown="return blokujEnter(event)"
-            onblur="edytujPole(${index},'kraj',this.innerText)">
-            ${r.kraj}
+            onblur="edytujPole(${index},'qth',this.innerText)">
+            ${r.qth}
         </td>
 
         <td contenteditable="true"
@@ -838,13 +862,13 @@
             function eksportCSV() {
 
                 let csv =
-                    "DataUTC,CzasUTC,Czestotliwosc,Stacja,Kraj,Jezyk,SINPO,QSL,Odbiornik,Antena,Uwagi\n";
+                    "DataUTC,CzasUTC,Czestotliwosc,Stacja,QTH,Jezyk,SINPO,QSL,Odbiornik,Antena,Uwagi\n";
 
                 log.forEach(r => {
 
                     csv +=
 
-                        `"${r.data}","${r.czas}","${r.freq}","${r.stacja}","${r.kraj}","${r.jezyk}","${r.sinpo}","${r.qsl}","${r.odbiornik}","${r.antena}","${r.uwagi.replace(/"/g, '""')}"\n`
+                        `"${r.data}","${r.czas}","${r.freq}","${r.stacja}","${r.qth}","${r.jezyk}","${r.sinpo}","${r.qsl}","${r.odbiornik}","${r.antena}","${r.uwagi.replace(/"/g, '""')}"\n`
 
                 });
 
@@ -898,7 +922,7 @@
                             czas: cols[1] || "",
                             freq: cols[2] || "",
                             stacja: cols[3] || "",
-                            kraj: cols[4] || "",
+                            qth: cols[4] || "",
                             jezyk: cols[5] || "",
                             sinpo: cols[6] || "",
                             qsl: cols[7] || "",
