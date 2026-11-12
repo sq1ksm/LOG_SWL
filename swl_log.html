@@ -124,10 +124,23 @@
             margin-top: 20px;
         }
 
+        /* --- NOWE STYLE DLA TABELI RESPONSYWNEJ --- */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            /* Włącza poziomy pasek przewijania, gdy tabela jest szersza niż ekran */
+            -webkit-overflow-scrolling: touch;
+            /* Płynne przewijanie na urządzeniach mobilnych */
+            margin-top: 15px;
+        }
+
         table {
             width: 100%;
+            min-width: 800px;
+            /* Zapobiega nadmiernemu ściskaniu kolumn na małych ekranach */
             border-collapse: collapse;
-            margin-top: 15px;
+            margin-top: 0;
+            /* Margines przeniesiony do .table-responsive */
         }
 
         th {
@@ -188,6 +201,23 @@
             font-size: 12px;
             color: #666;
         }
+
+        /* --- DODATKOWE DOSTOSOWANIE DLA MAŁYCH EKRANÓW (SMARTFONY) --- */
+        @media (max-width: 600px) {
+            body {
+                margin: 10px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            th,
+            td {
+                padding: 4px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 
@@ -228,7 +258,6 @@
             , pozostało:
             <span id="licznikWyslanych">0</span>
 
-
         </div>
 
         <div class="grid">
@@ -254,7 +283,7 @@
 
             <div>
                 <label>SINPO</label>
-                <input type="text" id="sinpo" maxlength="5" placeholder="45444">
+                <input type="text" id="sinpo" maxlength="5" placeholder="54321">
 
                 <div class="small">
                     Dokładnie 5 cyfr od 1 do 5
@@ -313,28 +342,31 @@
 
         </div>
 
-        <table>
+        <!-- OWIJAMY TABELĘ W KONTENER Z PRZEWIJANIEM -->
+        <div class="table-responsive">
+            <table>
 
-            <thead>
+                <thead>
 
-                <tr>
-                    <th style="width:90px">Data UTC</th>
-                    <th style="width:70px">Czas UTC</th>
-                    <th style="width:55px">kHz</th>
-                    <th>Stacja</th>
-                    <th style="width:80px">SINPO</th>
-                    <th style="width:120px">QTH</th>
-                    <th style="width:120px">Język</th>
-                    <th style="width:65px">QSL</th>
-                    <th style="width:130px">Operacje</th>
-                </tr>
+                    <tr>
+                        <th style="width:90px">Data UTC</th>
+                        <th style="width:70px">Czas UTC</th>
+                        <th style="width:55px">kHz</th>
+                        <th>Stacja</th>
+                        <th style="width:80px">SINPO</th>
+                        <th style="width:120px">QTH</th>
+                        <th style="width:120px">Język</th>
+                        <th style="width:65px">QSL</th>
+                        <th style="width:170px">Operacje</th>
+                    </tr>
 
-            </thead>
+                </thead>
 
-            <tbody id="tabela">
-            </tbody>
+                <tbody id="tabela">
+                </tbody>
 
-        </table>
+            </table>
+        </div>
 
         <div id="uwagiBox"></div>
 
@@ -736,7 +768,7 @@
                     if (!/^[1-5]{5}$/.test(wartosc)) {
 
                         alert(
-                            "SINPO musi mieć format np. 45444"
+                            "SINPO musi zawierać dokładnie 5 cyfr od 1 do 5 np. 54321"
                         );
 
                         pokazTabele();
