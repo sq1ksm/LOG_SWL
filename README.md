@@ -154,7 +154,6 @@ Działa we wszystkich aktualnych wersjach Chrome, Firefox, Edge i Safari.
 
 - Dane trzymane są wyłącznie w `localStorage` — brak synchronizacji chmurowej.
 - Brak automatycznej kopii zapasowej — tylko ręczny eksport CSV.
-- Kolejność w tabeli zależy od daty i czasu UTC wpisanych w wierszu — ręczna zmiana tych pól zmienia sortowanie.
 
 ---
 
