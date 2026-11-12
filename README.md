@@ -42,7 +42,7 @@ Lokalny dziennik nasłuchów radiowych dla pasm **LW / MW / SW / FM** — dział
 |------|------|
 | **Częstotliwość (kHz)** | Cyfry, opcjonalnie kropka lub przecinek (np. `6120`, `100.7`). **Wymagane.** |
 | **Stacja** | Nazwa / identyfikator stacji. **Wymagane.** |
-| **Kraj** | Kraj nadawania (opcjonalne). |
+| **Miejsce nadawania** | Miejsce położenia masztu nadajnika - QTH. (opcjonalne). |
 | **Język** | Język audycji (opcjonalne). |
 | **SINPO** | Dokładnie 5 cyfr od 1 do 5 (np. `45444`). **Wymagane.** |
 | **Odbiornik** | Model odbiornika (opcjonalne). |
@@ -88,7 +88,7 @@ Data i czas UTC dodawane są **automatycznie** w chwili dodania wpisu.
 Kolumny (w tej kolejności):
 
 ```
-DataUTC, CzasUTC, Czestotliwosc, Stacja, Kraj, Jezyk, SINPO, QSL, Odbiornik, Antena, Uwagi
+DataUTC, CzasUTC, Czestotliwosc, Stacja, QTH, Jezyk, SINPO, QSL, Odbiornik, Antena, Uwagi
 ```
 
 - Separator: przecinek
