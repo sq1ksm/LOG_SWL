@@ -192,8 +192,8 @@
                         Wymagane.</td>
                 </tr>
                 <tr>
-                    <td><b>Kraj</b></td>
-                    <td>Kraj nadawania (opcjonalne).</td>
+                    <td><b>Miejsce nadawania</b></td>
+                    <td>Miejsce położenia masztu nadajnika - QTH. (opcjonalne).</td>
                 </tr>
                 <tr>
                     <td><b>Język</b></td>
@@ -246,9 +246,9 @@
             odbiór:</p>
 
         <ul>
-            <li>🔴</span> <b>puste</b> – brak wysłanej / nie wysłano</li>
-            <li>🟡</span> <b>Wysłana</b> – wysłano raport / kartę QSL</li>
-            <li>🟢</span> <b>Otrzymana</b> – otrzymano potwierdzenie</li>
+            <li>🔴 – brak wysłanej / nie wysłano</li>
+            <li>🟡 – wysłano raport / kartę QSL</li>
+            <li>🟢 – otrzymano potwierdzenie</li>
         </ul>
 
         <p>Zmiana stanu zapisuje się od razu po wybraniu z listy.</p>
@@ -378,7 +378,7 @@
 
         <p>Pole <b>„Szukaj…”</b> filtruje wpisy na żywo. Wyszukiwanie obejmuje
             <b>wszystkie pola</b> każdego wpisu (data, częstotliwość, stacja,
-            kraj, język, SINPO, QSL, odbiornik, antena, uwagi), niezależnie od
+            miejsce nadawania, język, SINPO, QSL, odbiornik, antena, uwagi), niezależnie od
             wielkości liter.
         </p>
 
@@ -389,7 +389,7 @@
         <p>
             <code>DataUTC</code>, <code>CzasUTC</code>,
             <code>Czestotliwosc</code>, <code>Stacja</code>,
-            <code>Kraj</code>, <code>Jezyk</code>, <code>SINPO</code>,
+            <code>QTH</code>, <code>Jezyk</code>, <code>SINPO</code>,
             <code>QSL</code>, <code>Odbiornik</code>, <code>Antena</code>,
             <code>Uwagi</code>
         </p>
@@ -418,8 +418,9 @@
         <h2>9. Znane ograniczenia</h2>
 
         <ul>
-            <li>Dane trzymane są w <b>localStorage</b> – jedna przeglądarka = jeden log.
-                Synchronizacja między urządzeniami nie jest przewidziana.</li>
+            <li>Dane trzymane są w <b>localStorage</b> – jedna przeglądarka = jeden log.<br>
+                Synchronizacja między urządzeniami nie jest przewidziana, trzeba kożystać z importu i eksportu logu.
+            </li>
             <li>Brak automatycznej kopii zapasowej – tylko ręczny eksport CSV.</li>
         </ul>
 
