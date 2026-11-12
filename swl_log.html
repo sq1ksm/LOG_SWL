@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="author" content="Sławek Kuchowicz">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d6efd">
     <title>Broadcast DX Logger</title>
 
     <style>
@@ -323,7 +325,7 @@
         <div id="uwagiBox"></div>
 
         <div class="footer">
-            Broadcast DX Logger v0.9| Copyright © Sławek Kuchowicz
+            Broadcast DX Logger v1.0| Copyright © Sławek Kuchowicz
         </div>
         <div id="modal" style="display:none;
             position:fixed;
@@ -355,20 +357,17 @@
 
         </div>
         <script>
-
-            // ---------------------------------------------------------
             // GŁÓWNY STAN APLIKACJI
             // Wczytanie logu z localStorage (lub pusta tablica, jeśli brak)
-            // ---------------------------------------------------------
+
             let log =
                 JSON.parse(
                     localStorage.getItem("broadcastDXLog")
                 ) || [];
 
-            // ---------------------------------------------------------
             // ZEGAR UTC
             // Odświeża wyświetlanie aktualnego czasu UTC co sekundę
-            // ---------------------------------------------------------
+
             function aktualizujUTC() {
 
                 const d = new Date();
@@ -390,11 +389,8 @@
 
             setInterval(aktualizujUTC, 1000);
             aktualizujUTC();
-
-            // ---------------------------------------------------------
             // WALIDACJA NA BIEŻĄCO
             // Pole SINPO - dopuszczamy tylko cyfry 1-5
-            // ---------------------------------------------------------
             document
                 .getElementById("sinpo")
                 .addEventListener("input", function () {
@@ -414,10 +410,8 @@
 
                 });
 
-            // ---------------------------------------------------------
             // ZAPIS DO LOCALSTORAGE
             // Zapisuje log i odświeża licznik wpisów
-            // ---------------------------------------------------------
             function zapisz() {
 
                 localStorage.setItem(
@@ -431,10 +425,9 @@
 
             }
 
-            // ---------------------------------------------------------
             // POMOCNICZA FUNKCJA - POBIERANIE AKTUALNEJ DATY/CZASU UTC
             // Zwraca obiekt { data: "YYYY-MM-DD", czas: "HH:MM:SS" }
-            // ---------------------------------------------------------
+
             function pobierzUTC() {
 
                 const d = new Date();
@@ -453,11 +446,10 @@
 
             }
 
-            // ---------------------------------------------------------
             // DODAWANIE NOWEGO WPISU
             // Waliduje SINPO, częstotliwość i stację, potem dodaje wpis
             // i czyści formularz
-            // ---------------------------------------------------------
+
             function dodajWpis() {
 
                 const sinpo =
@@ -527,10 +519,9 @@
 
             }
 
-            // ---------------------------------------------------------
             // BLOKADA ENTER W KOMÓRKACH EDYTOWALNYCH
             // Enter kończy edycję (blur) zamiast dodawać nową linię
-            // ---------------------------------------------------------
+
             function blokujEnter(e) {
 
                 if (e.key === "Enter") {
@@ -545,11 +536,10 @@
                 return true;
             }
 
-            // ---------------------------------------------------------
             // RENDEROWANIE TABELI
             // Sortuje wpisy od najnowszych, filtruje po frazie w wyszukiwarce
             // i buduje wiersze z edytowalnymi komórkami oraz przyciskami
-            // ---------------------------------------------------------
+
             function pokazTabele() {
 
                 const tabela =
@@ -582,7 +572,6 @@
                         return;
 
                     tabela.innerHTML += `
-
         <tr>
 
        <td contenteditable="true"
@@ -675,10 +664,9 @@
 
             }
 
-            // ---------------------------------------------------------
             // EDYCJA POLA Z TABELI
             // Waliduje wartość zależnie od kolumny i zapisuje ją w logu
-            // ---------------------------------------------------------
+
             function edytujPole(
                 index,
                 pole,
@@ -756,10 +744,9 @@
 
             }
 
-            // ---------------------------------------------------------
             // MODAL ZE SZCZEGÓŁAMI WPISU
             // Pokazuje pełne dane wpisu łącznie z uwagami
-            // ---------------------------------------------------------
+
             function pokazUwagi(index) {
 
                 document.getElementById("modal").style.display = "block";
@@ -803,9 +790,8 @@
 
             }
 
-            // ---------------------------------------------------------
             // USUWANIE POJEDYNCZEGO WPISU
-            // ---------------------------------------------------------
+
             function usun(index) {
 
                 if (
@@ -823,9 +809,8 @@
 
             }
 
-            // ---------------------------------------------------------
             // CZYSZCZENIE CAŁEGO LOGU
-            // ---------------------------------------------------------
+
             function usunWszystko() {
 
                 if (
@@ -847,10 +832,9 @@
 
             }
 
-            // ---------------------------------------------------------
             // EKSPORT DO CSV
             // Buduje plik CSV (z BOM dla Excela) i pobiera go
-            // ---------------------------------------------------------
+
             function eksportCSV() {
 
                 let csv =
@@ -886,10 +870,9 @@
 
             }
 
-            // ---------------------------------------------------------
             // IMPORT Z PLIKU CSV
             // Wczytuje plik, parsuje wiersze i nadpisuje cały log
-            // ---------------------------------------------------------
+
             document.getElementById("importCSV").addEventListener("change", function (e) {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -934,10 +917,9 @@
                 reader.readAsText(file, "UTF-8");
             });
 
-            // ---------------------------------------------------------
             // INICJALIZACJA
             // Zapis stanu i pierwsze wyrenderowanie tabeli
-            // ---------------------------------------------------------
+
             zapisz();
             pokazTabele();
             function edytujQSL(index, wartosc) {
