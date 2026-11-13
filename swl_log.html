@@ -412,11 +412,17 @@
             font-family: Arial, sans-serif;
         }
 
+        /* Napis "Broadcast DX Logger by SQ1KSM" – kursywa, mniejsza czcionka */
+        .qslSignature .credit {
+            font-style: italic;
+            font-size: 8px;
+        }
+
         /* Linia podpisu tylko po prawej stronie karty */
         .qslSignature .signLine {
             border-top: 1px solid #999;
-            padding-top: 22px;
-            /* miejsce na odręczny podpis */
+            padding-top: 3px;
+            /* tekst tuż pod linią – bez pustki */
             min-width: 220px;
             text-align: center;
         }
@@ -1185,7 +1191,7 @@
                     <div class="qslRow"><b>Antenna</b> ${r.antena || "-"}</div>
 
                     <div class="qslSignature">
-                        <span>Broadcast DX Logger by SQ1KSM</span>
+                        <span class="credit">Broadcast DX Logger by SQ1KSM</span>
                         <span class="signLine">SINPO Report – Listener's Signature</span>
                     </div>
 
