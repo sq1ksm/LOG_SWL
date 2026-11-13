@@ -2,7 +2,7 @@
 
 Lokalny dziennik nasłuchów radiowych dla pasm **LW / MW / SW / FM** — działa w całości w przeglądarce, bez serwera i bez bazy danych. Wystarczy otworzyć plik HTML.
 
-![Wersja](https://img.shields.io/badge/wersja-0.9-blue)
+![Wersja](https://img.shields.io/badge/wersja-1.4-blue)
 ![Licencja](https://img.shields.io/badge/licencja-MIT-green)
 ![Bez zależności](https://img.shields.io/badge/zależności-brak-success)
 
@@ -10,13 +10,17 @@ Lokalny dziennik nasłuchów radiowych dla pasm **LW / MW / SW / FM** — dział
 
 ## Funkcje
 
-- Dodawanie wpisów z formularza (częstotliwość, stacja, kraj, język, SINPO, odbiornik, antena, uwagi)
+- Dodawanie wpisów z formularza (częstotliwość, stacja, QTH nadajnika, QTH odbiorcy, język, SINPO, odbiornik, antena, uwagi)
 - Automatyczny **czas i data UTC** przy dodawaniu wpisu
+- **Zapamiętywanie sprzętu i lokalizacji** (Odbiornik, Antena, QTH odbioru) w `localStorage` — nie musisz wpisywać ich przy każdym nasłuchu
 - **Edytowanie wpisów bezpośrednio w tabeli** (klik → zmiana → Enter)
 - Walidacja na bieżąco: SINPO (5 cyfr 1–5), częstotliwość, data, czas
 - Status **QSL**: 🔴 brak / 🟡 wysłana / 🟢 otrzymana
-- Wyszukiwanie na żywo we wszystkich polach
+- **Generowanie i drukowanie karty QSL** (w języku angielskim, format 14x9 cm)
+- **Drukowanie naklejek QSL** (format 9x5 cm, bez zbędnych elementów)
 - **Eksport / import CSV** (UTF-8 z BOM — otwiera się poprawnie w Excelu)
+- Inteligentny import CSV z **łączeniem i deduplikacją** danych
+- Wyszukiwanie na żywo we wszystkich polach
 - Licznik wpisów i zegar UTC w nagłówku
 - Responsywny layout (grid + auto-fit)
 - Zero zależności — jeden plik HTML
@@ -42,11 +46,12 @@ Lokalny dziennik nasłuchów radiowych dla pasm **LW / MW / SW / FM** — dział
 |------|------|
 | **Częstotliwość (kHz)** | Cyfry, opcjonalnie kropka lub przecinek (np. `6120`, `100.7`). **Wymagane.** |
 | **Stacja** | Nazwa / identyfikator stacji. **Wymagane.** |
-| **Miejsce nadawania** | Miejsce położenia masztu nadajnika - QTH. (opcjonalne). |
+| **Miejsce nadawania (QTH nad.)** | Miejsce położenia masztu nadajnika (opcjonalne). |
 | **Język** | Język audycji (opcjonalne). |
 | **SINPO** | Dokładnie 5 cyfr od 1 do 5 (np. `45444`). **Wymagane.** |
-| **Odbiornik** | Model odbiornika (opcjonalne). |
-| **Antena** | Rodzaj / model anteny (opcjonalne). |
+| **Odbiornik** | Model odbiornika (opcjonalne, zapamiętywane). |
+| **Antena** | Rodzaj / model anteny (opcjonalne, zapamiętywane). |
+| **QTH odbioru** | Miejsce, z którego prowadzisz nasłuch (opcjonalne, zapamiętywane). |
 | **Uwagi** | Opis odbioru, fading, zakłócenia, program, godziny (opcjonalne). |
 
 Data i czas UTC dodawane są **automatycznie** w chwili dodania wpisu.
@@ -56,14 +61,20 @@ Data i czas UTC dodawane są **automatycznie** w chwili dodania wpisu.
 - Wpisy sortowane są **od najnowszego**.
 - Kliknięcie komórki umożliwia edycję — zmiana zapisuje się po `Enter` lub kliknięciu poza pole.
 - Błędne dane (np. litera w SINPO, zły format daty) zostaną odrzucone, a poprzednia poprawna wartość przywrócona.
+- Przycisk **Info** otwiera podgląd wpisu, kartę QSL oraz opcje drukowania.
 
-### Status QSL
+### Status QSL i Drukowanie
 
 | Ikona | Znaczenie |
 |-------|-----------|
 | 🔴 | brak / nie wysłano |
 | 🟡 | wysłana |
 | 🟢 | otrzymana |
+
+Po kliknięciu przycisku **Info** w tabeli, otwiera się okno ze szczegółami. Znajdziesz tam podgląd karty QSL oraz trzy przyciski drukujące:
+1. **Drukuj samą QSL** – generuje standardową kartę 14x9 cm (w całości po angielsku, ze stopką "Report by SQ1KSM").
+2. **Drukuj z uwagami** – drukuje kartę QSL, a pod nią Twoje prywatne notatki.
+3. **Drukuj naklejkę** – generuje mniejszą wersję (9x5 cm) pozbawioną nagłówka i stopki, gotową do naklejenia na kopertę.
 
 ---
 
@@ -86,79 +97,3 @@ Data i czas UTC dodawane są **automatycznie** w chwili dodania wpisu.
 ## Format pliku CSV
 
 Kolumny (w tej kolejności):
-
-```
-DataUTC, CzasUTC, Czestotliwosc, Stacja, QTH, Jezyk, SINPO, QSL, Odbiornik, Antena, Uwagi
-```
-
-- Separator: przecinek
-- Kodowanie: **UTF-8 z BOM** (poprawnie otwiera się w Excelu)
-- Dozwolone wartości kolumny **QSL**: `(puste)`, `Wysłana`, `Otrzymana`
-- Znaki `"` w polach tekstowych są podwajane (`""`) zgodnie ze standardem CSV
-- Pierwszy wiersz to nagłówek — przy imporcie jest pomijany
-
-⚠️ **Import nadpisuje cały dotychczasowy log.** Przed importem zrób eksport aktualnych danych.
-
----
-
-## Przechowywanie danych
-
-Wszystkie dane przechowywane są w **`localStorage`** przeglądarki pod kluczem `broadcastDXLog`.
-
-**Konsekwencje:**
-
-- Jedna przeglądarka = jeden log.
-- Brak synchronizacji między urządzeniami.
-- Wyczyszczenie danych przeglądarki, tryb prywatny lub zmiana urządzenia → **utrata logu**.
-- **Regularnie eksportuj CSV** — to jedyna kopia zapasowa poza przeglądarką.
-
----
-
-## Zalecenia praktyczne
-
-1. **Eksportuj CSV** po każdej sesji nasłuchowej.
-2. Przed importem CSV **zrób kopię** aktualnego logu.
-3. Używaj spójnego formatu czasu UTC — ułatwia porównywanie wpisów z harmonogramami stacji.
-4. W polu **Uwagi** zapisuj godziny rozpoczęcia i zakończenia audycji — pomaga przy weryfikacji QSL.
-
----
-
-## Struktura projektu
-
-```
-.
-├── index.html   # główna aplikacja (cała logika + style + dane)
-├── help.html    # strona pomocy (otwierana przyciskiem „Pomoc”)
-└── README.md    # ten plik
-```
-
-Wszystko zawarte jest w pojedynczych plikach HTML — brak zależności, brak `node_modules`, brak build-stepu.
-
----
-
-## Wsparcie przeglądarek
-
-Aplikacja korzysta z:
-
-- `localStorage`
-- `Blob` / `URL.createObjectURL` (eksport)
-- `FileReader` (import)
-- `contenteditable` (edycja w tabeli)
-- ES6+ (arrow functions, template literals, `padStart`, `forEach`)
-
-Działa we wszystkich aktualnych wersjach Chrome, Firefox, Edge i Safari.
-
----
-
-## Znane ograniczenia
-
-- Dane trzymane są wyłącznie w `localStorage` — brak synchronizacji chmurowej.
-- Brak automatycznej kopii zapasowej — tylko ręczny eksport CSV.
-
----
-
-## Licencja
-
-Projekt udostępniany na licencji **MIT** — możesz go swobodnie używać, modyfikować i rozpowszechniać.
-
-Copyright © Sławek Kuchowicz
