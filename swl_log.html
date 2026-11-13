@@ -70,19 +70,27 @@
             gap: 12px;
         }
 
-        /* Siatka: Uwagi | Odbiornik | Antena */
-        .grid.grid3 {
-            grid-template-columns: 2fr 1fr 1fr;
+        .grid.grid4 {
+            grid-template-columns: 1fr 2fr;
         }
 
-        .grid.grid3 textarea {
+        .grid-fields {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .grid textarea {
             min-height: 36px;
             resize: vertical;
         }
 
-        /* Na małych ekranach układamy pionowo */
         @media (max-width: 700px) {
-            .grid.grid3 {
+            .grid.grid4 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-fields {
                 grid-template-columns: 1fr;
             }
         }
@@ -141,7 +149,6 @@
             margin-top: 20px;
         }
 
-        /* --- TABELA RESPONSYWNA --- */
         .table-responsive {
             width: 100%;
             overflow-x: auto;
@@ -167,7 +174,6 @@
             padding: 6px;
         }
 
-        /* Wyrównanie kolumny kHz do prawej */
         #tabela td:nth-child(3) {
             text-align: right;
             padding-right: 12px;
@@ -215,7 +221,380 @@
             color: #666;
         }
 
-        /* --- MAŁE EKRANY (SMARTFONY) --- */
+        /* ============================================================
+           MODAL – okno szczegółów wpisu (karta QSL + uwagi)
+           ============================================================ */
+        .modalOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 9999;
+        }
+
+        .modalBox {
+            background: white;
+            max-width: 820px;
+            margin: 60px auto;
+            padding: 22px 24px;
+            border-radius: 10px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .modalHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e3e8ee;
+            padding-bottom: 10px;
+        }
+
+        .modalHeader h3 {
+            margin: 0;
+            color: #1e3a5f;
+        }
+
+        .modalStatus {
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        /* KARTA QSL - Wymiary standardowe 14x9 cm (poziom) */
+        .qslCard {
+            width: 14cm;
+            height: 9cm;
+            box-sizing: border-box;
+            margin: 0 auto;
+            border: 2px solid #1e3a5f;
+            border-radius: 10px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #ffffff 0%, #f4f8fc 100%);
+            font-family: Georgia, "Times New Roman", serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .qslCard::before {
+            content: "QSL";
+            position: absolute;
+            top: -5px;
+            right: 10px;
+            font-size: 50px;
+            font-weight: bold;
+            color: #1e3a5f;
+            opacity: 0.07;
+            font-family: Arial, sans-serif;
+            pointer-events: none;
+        }
+
+        .qslHeader {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #1e3a5f;
+            border-bottom: 2px solid #1e3a5f;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .qslStation {
+            font-size: 32px;
+            /* Zmienione na 32px */
+            font-weight: bold;
+            color: #1e3a5f;
+            margin-bottom: 2px;
+            word-break: break-word;
+            line-height: 1.1;
+        }
+
+        .qslFreq {
+            font-size: 14px;
+            color: #0a7d32;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-family: Arial, sans-serif;
+        }
+
+        .qslGrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .qslGrid>div {
+            background: #fff;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            padding: 4px 8px;
+            text-align: center;
+        }
+
+        .qslGrid .lbl {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #777;
+            font-family: Arial, sans-serif;
+        }
+
+        .qslGrid .val {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        .qslSinpo {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .qslSinpo>div {
+            flex: 1;
+            text-align: center;
+            background: #1e3a5f;
+            color: white;
+            border-radius: 6px;
+            padding: 6px 4px;
+        }
+
+        .qslSinpo .letter {
+            font-size: 9px;
+            opacity: 0.85;
+            font-family: Arial, sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .qslSinpo .num {
+            font-size: 16px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+
+        .qslRow {
+            font-size: 11px;
+            margin-bottom: 4px;
+            color: #444;
+            font-family: Arial, sans-serif;
+        }
+
+        .qslRow b {
+            color: #1e3a5f;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            min-width: 80px;
+        }
+
+        .qslSignature {
+            position: absolute;
+            bottom: 10px;
+            left: 14px;
+            right: 14px;
+            border-top: 1px dashed #bbb;
+            padding-top: 4px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            color: #777;
+            font-family: Arial, sans-serif;
+        }
+
+        .qslUwagiTitle {
+            font-size: 15px;
+            font-weight: bold;
+            color: #1e3a5f;
+            margin: 22px 0 8px 0;
+            border-bottom: 1px solid #e3e8ee;
+            padding-bottom: 4px;
+        }
+
+        .qslNotes {
+            background: #fffceb;
+            border-left: 4px solid #e6a700;
+            padding: 12px 14px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: pre-wrap;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* ============================================================
+           DRUK
+           ============================================================ */
+        @media print {
+            @page {
+                margin: 0;
+            }
+
+            body {
+                background: #fff;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* GŁÓWNY WIDOK */
+            .header,
+            .grid,
+            .buttons,
+            .search,
+            .warning,
+            .small {
+                display: none !important;
+            }
+
+            .table-responsive {
+                overflow: visible !important;
+            }
+
+            table {
+                min-width: 100% !important;
+                border: 1px solid #000 !important;
+            }
+
+            th {
+                background: #f0f0f0 !important;
+                color: #000 !important;
+                border: 1px solid #000 !important;
+            }
+
+            th,
+            td {
+                border: 1px solid #000 !important;
+            }
+
+            td[contenteditable="true"] {
+                background: transparent !important;
+            }
+
+            /* WIDOK KARTY QSL */
+            body.modal-open .container {
+                display: none !important;
+            }
+
+            body:not(.modal-open) .modalOverlay {
+                display: none !important;
+            }
+
+            body.modal-open .modalOverlay {
+                display: block !important;
+                position: static !important;
+                background: none !important;
+                height: auto !important;
+                width: 100% !important;
+            }
+
+            body.modal-open .modalBox {
+                box-shadow: none !important;
+                margin: 2cm auto !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                max-height: none !important;
+                overflow: visible !important;
+            }
+
+            .modalHeader,
+            .modalBox button {
+                display: none !important;
+            }
+
+            /* Ukrywanie uwag przy druku samej karty QSL */
+            body.print-only-card .qslUwagiTitle,
+            body.print-only-card .qslNotes {
+                display: none !important;
+            }
+
+            /* Klasa do ukrywania statusu QSL na wydruku */
+            .no-print {
+                display: none !important;
+            }
+
+            /* SINPO czytelne na wydruku */
+            .qslSinpo>div {
+                background: #fff !important;
+                color: #1e3a5f !important;
+                border: 2px solid #1e3a5f !important;
+            }
+
+            .qslSinpo .letter {
+                opacity: 1 !important;
+            }
+
+            /* ============================================================
+               NAKLEJKA (9x5 cm, bez nagłówka i stopki)
+               ============================================================ */
+            body.print-sticker .qslCard {
+                width: 9cm !important;
+                height: 5cm !important;
+                padding: 6px 10px !important;
+            }
+
+            body.print-sticker .qslHeader {
+                display: none !important;
+            }
+
+            body.print-sticker .qslSignature {
+                display: none !important;
+            }
+
+            body.print-sticker .qslUwagiTitle,
+            body.print-sticker .qslNotes {
+                display: none !important;
+            }
+
+            /* Zmniejszenie elementów wnętrza na naklejce, aby wszystko się zmieściło */
+            body.print-sticker .qslStation {
+                font-size: 16px !important;
+                /* Na naklejce mniejsza czcionka */
+                margin-bottom: 0 !important;
+            }
+
+            body.print-sticker .qslFreq {
+                font-size: 12px !important;
+                margin-bottom: 4px !important;
+            }
+
+            body.print-sticker .qslGrid {
+                margin-bottom: 4px !important;
+                gap: 4px !important;
+            }
+
+            body.print-sticker .qslGrid>div {
+                padding: 2px 6px !important;
+            }
+
+            body.print-sticker .qslSinpo {
+                margin-bottom: 4px !important;
+            }
+
+            body.print-sticker .qslSinpo>div {
+                padding: 4px !important;
+            }
+
+            body.print-sticker .qslRow {
+                font-size: 10px !important;
+                margin-bottom: 2px !important;
+            }
+
+            body.print-sticker .qslCard::before {
+                font-size: 36px !important;
+                top: 0 !important;
+            }
+        }
+
         @media (max-width: 600px) {
             body {
                 margin: 10px;
@@ -229,6 +608,33 @@
             td {
                 padding: 4px;
                 font-size: 12px;
+            }
+
+            .modalBox {
+                margin: 20px auto;
+                width: 92%;
+                padding: 14px;
+                max-height: 95vh;
+            }
+
+            .modalHeader {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .qslCard {
+                width: 100%;
+                height: auto;
+                min-height: 9cm;
+            }
+
+            .qslGrid {
+                grid-template-columns: 1fr;
+            }
+
+            .qslSinpo .num {
+                font-size: 18px;
             }
         }
     </style>
@@ -285,7 +691,7 @@
             </div>
 
             <div>
-                <label>Miejsce nadawania</label>
+                <label>Miejsce nadawania (QTH nad.)</label>
                 <input type="text" id="qth">
             </div>
 
@@ -304,21 +710,26 @@
             </div>
         </div>
 
-        <div class="grid grid3" style="margin-top:10px;">
+        <div class="grid grid4" style="margin-top:10px;">
 
             <div>
                 <label>Uwagi</label>
                 <textarea id="uwagi" placeholder="Opis odbioru, fading, zakłócenia, program..."></textarea>
             </div>
 
-            <div>
-                <label>Odbiornik</label>
-                <input type="text" id="odbiornik">
-            </div>
-
-            <div>
-                <label>Antena</label>
-                <input type="text" id="antena">
+            <div class="grid-fields">
+                <div>
+                    <label>Odbiornik</label>
+                    <input type="text" id="odbiornik">
+                </div>
+                <div>
+                    <label>Antena</label>
+                    <input type="text" id="antena">
+                </div>
+                <div>
+                    <label>QTH odbioru</label>
+                    <input type="text" id="qthOdbiorcy">
+                </div>
             </div>
 
         </div>
@@ -364,7 +775,8 @@
                         <th style="width:55px">kHz</th>
                         <th>Stacja</th>
                         <th style="width:80px">SINPO</th>
-                        <th style="width:120px">QTH</th>
+                        <th style="width:120px">QTH nad.</th>
+                        <th style="width:120px">QTH odb.</th>
                         <th style="width:120px">Język</th>
                         <th style="width:65px">QSL</th>
                         <th style="width:130px">Operacje</th>
@@ -381,677 +793,613 @@
         <div id="uwagiBox"></div>
 
         <div class="footer">
-            Broadcast DX Logger v1.1 | Copyright © Sławek Kuchowicz
+            Broadcast DX Logger v1.4 | Copyright © Sławek Kuchowicz
         </div>
-        <div id="modal" style="display:none;
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(0,0,0,0.5);
-            z-index:9999;">
 
-            <div style="
-        background:white;
-        max-width:700px;
-        margin:80px auto;
-        padding:20px;
-        border-radius:10px;">
+    </div>
 
+    <!-- MODAL -->
+    <div id="modal" class="modalOverlay">
+        <div class="modalBox">
+            <div class="modalHeader">
                 <h3>Szczegóły wpisu</h3>
-
-                <div id="modalContent"></div>
-
-                <br>
-
-                <button onclick="zamknijModal()" class="delBtn">
-                    Zamknij
-                </button>
-
+                <span id="modalQslStatus" class="modalStatus no-print"></span>
             </div>
 
+            <div id="modalContent"></div>
+
+            <br>
+
+            <button onclick="drukuj('karta')" class="btnCsv">🖨 Drukuj samą QSL</button>
+            <button onclick="drukuj('uwagi')" class="btnCsv">🖨 Drukuj z uwagami</button>
+            <button onclick="drukuj('naklejka')" class="btnCsv">🏷️ Drukuj naklejkę</button>
+            <button onclick="zamknijModal()" class="delBtn">Zamknij</button>
         </div>
-        <script>
-            // GŁÓWNY STAN APLIKACJI
-            let log =
-                JSON.parse(
-                    localStorage.getItem("broadcastDXLog")
-                ) || [];
+    </div>
 
-            // NOWA FUNKCJA FORMATUJĄCA CZĘSTOTLIWOŚĆ
-            // Wstawia spację co trzy cyfry (np. 6070 -> 6 070)
-            function formatFreq(freq) {
-                if (freq === undefined || freq === null) return "";
-                let str = freq.toString().trim();
-                if (str === "") return "";
+    <script>
+        // GŁÓWNY STAN APLIKACJI
+        let log =
+            JSON.parse(
+                localStorage.getItem("broadcastDXLog")
+            ) || [];
 
-                // Usuwamy ewentualne stare spacje
-                str = str.replace(/\s/g, '');
+        // USTAWIENIA SPRZĘTU I LOKALIZACJI (osobny klucz, nie trafia do CSV)
+        let ustawienia =
+            JSON.parse(
+                localStorage.getItem("broadcastDXUstawienia")
+            ) || { odbiornik: "", antena: "", qthOdbiorcy: "" };
 
-                // Sprawdzamy czy to liczba (uwzględniając przecinek)
-                if (isNaN(Number(str.replace(',', '.')))) return freq;
+        // FORMATOWANIE CZĘSTOTLIWOŚCI
+        function formatFreq(freq) {
+            if (freq === undefined || freq === null) return "";
+            let str = freq.toString().trim();
+            if (str === "") return "";
 
-                // Dzielimy na część całkowitą i dziesiętną
-                let parts = str.split(/[.,]/);
-                let intPart = parts[0];
+            str = str.replace(/\s/g, '');
 
-                // Wstawiamy spacje w części całkowitej
-                intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+            if (isNaN(Number(str.replace(',', '.')))) return freq;
 
-                if (parts.length > 1) {
-                    return intPart + "," + parts[1];
-                }
-                return intPart;
+            let parts = str.split(/[.,]/);
+            let intPart = parts[0];
+
+            intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+            if (parts.length > 1) {
+                return intPart + "," + parts[1];
             }
+            return intPart;
+        }
 
-            // ZEGAR UTC
-            function aktualizujUTC() {
+        // ZEGAR UTC
+        function aktualizujUTC() {
 
-                const d = new Date();
+            const d = new Date();
 
-                const h =
-                    String(d.getUTCHours()).padStart(2, "0");
+            const h =
+                String(d.getUTCHours()).padStart(2, "0");
 
-                const m =
-                    String(d.getUTCMinutes()).padStart(2, "0");
+            const m =
+                String(d.getUTCMinutes()).padStart(2, "0");
 
-                const s =
-                    String(d.getUTCSeconds()).padStart(2, "0");
+            const s =
+                String(d.getUTCSeconds()).padStart(2, "0");
 
-                document.getElementById("utcClock")
-                    .textContent =
-                    `UTC: ${h}:${m}:${s}`;
+            document.getElementById("utcClock")
+                .textContent =
+                `UTC: ${h}:${m}:${s}`;
 
-            }
+        }
 
-            setInterval(aktualizujUTC, 1000);
-            aktualizujUTC();
+        setInterval(aktualizujUTC, 1000);
+        aktualizujUTC();
 
-            // WALIDACJA NA BIEŻĄCO
-            document
-                .getElementById("sinpo")
-                .addEventListener("input", function () {
+        // WALIDACJA NA BIEŻĄCO
+        document
+            .getElementById("sinpo")
+            .addEventListener("input", function () {
 
-                    this.value =
-                        this.value.replace(/[^1-5]/g, "");
+                this.value =
+                    this.value.replace(/[^1-5]/g, "");
 
-                });
-
-            document
-                .getElementById("freq")
-                .addEventListener("input", function () {
-
-                    this.value =
-                        this.value.replace(/[^0-9.,]/g, "");
-
-                });
-
-            // ZAPIS DO LOCALSTORAGE
-            function zapisz() {
-
-                localStorage.setItem(
-                    "broadcastDXLog",
-                    JSON.stringify(log)
-                );
-
-                document.getElementById("licznik").textContent = log.length;
-
-                const wyslane = log.filter(
-                    r => r.qsl === "Wysłana"
-                ).length;
-
-                const odebrane = log.filter(
-                    r => r.qsl === "Otrzymana"
-                ).length;
-
-                document.getElementById("licznikWyslanych").textContent = wyslane;
-                document.getElementById("licznikOdebranych").textContent = odebrane;
-
-            }
-
-            // POBIERANIE AKTUALNEJ DATY/CZASU UTC
-            function pobierzUTC() {
-
-                const d = new Date();
-
-                return {
-
-                    data:
-                        d.toISOString()
-                            .slice(0, 10),
-
-                    czas:
-                        d.toISOString()
-                            .slice(11, 19)
-
-                };
-
-            }
-
-            // DODAWANIE NOWEGO WPISU
-            function dodajWpis() {
-
-                const sinpo =
-                    document.getElementById("sinpo")
-                        .value
-                        .trim();
-
-                if (!/^[1-5]{5}$/.test(sinpo)) {
-
-                    alert(
-                        "SINPO musi zawierać dokładnie 5 cyfr od 1 do 5."
-                    );
-
-                    return;
-                }
-
-                const utc =
-                    pobierzUTC();
-                if (
-                    document.getElementById("freq").value.trim() === ""
-                ) {
-                    alert("Podaj częstotliwość.");
-                    return;
-                }
-
-                if (
-                    document.getElementById("stacja").value.trim() === ""
-                ) {
-                    alert("Podaj nazwę stacji.");
-                    return;
-                }
-
-                log.push({
-
-                    data: utc.data,
-                    czas: utc.czas,
-                    freq:
-                        document.getElementById("freq").value,
-                    stacja:
-                        document.getElementById("stacja").value,
-                    qth:
-                        document.getElementById("qth").value,
-                    jezyk:
-                        document.getElementById("jezyk").value,
-                    sinpo:
-                        document.getElementById("sinpo").value,
-                    qsl: "",
-                    odbiornik:
-                        document.getElementById("odbiornik").value,
-                    antena:
-                        document.getElementById("antena").value,
-                    uwagi:
-                        document.getElementById("uwagi").value
-
-                });
-
-                document.getElementById("freq").value = "";
-                document.getElementById("stacja").value = "";
-                document.getElementById("qth").value = "";
-                document.getElementById("jezyk").value = "";
-                document.getElementById("sinpo").value = "";
-                document.getElementById("uwagi").value = "";
-
-                zapisz();
-
-                pokazTabele();
-
-            }
-
-            // BLOKADA ENTER W KOMÓRKACH EDYTOWALNYCH
-            function blokujEnter(e) {
-
-                if (e.key === "Enter") {
-
-                    e.preventDefault();
-
-                    e.target.blur();
-
-                    return false;
-                }
-
-                return true;
-            }
-
-            // RENDEROWANIE TABELI
-            function pokazTabele() {
-
-                const tabela =
-                    document.getElementById("tabela");
-
-                tabela.innerHTML = "";
-
-                const filtr =
-                    document.getElementById("szukaj")
-                        .value
-                        .toLowerCase();
-                log.sort((a, b) => {
-
-                    const dataA =
-                        new Date(a.data + "T" + a.czas);
-
-                    const dataB =
-                        new Date(b.data + "T" + b.czas);
-
-                    return dataB - dataA;
-
-                });
-                log.forEach((r, index) => {
-
-                    const txt =
-                        JSON.stringify(r)
-                            .toLowerCase();
-
-                    if (!txt.includes(filtr))
-                        return;
-
-                    tabela.innerHTML += `
-        <tr>
-
-       <td contenteditable="true"
-           onkeydown="return blokujEnter(event)"
-            onblur="edytujPole(${index},'data',this.innerText)">
-            ${r.data}
-        </td>
-
-       <td contenteditable="true"
-           onkeydown="return blokujEnter(event)"
-            onblur="edytujPole(${index},'czas',this.innerText)">
-            ${r.czas}
-        </td>
-
-        <td contenteditable="true"
-            onkeydown="return blokujEnter(event)"
-            onblur="edytujPole(${index},'freq',this.innerText)">
-            ${formatFreq(r.freq)}
-        </td>
-
-        <td contenteditable="true"
-    onkeydown="return blokujEnter(event)"
-    onblur="edytujPole(${index},'stacja',this.innerText)">
-    ${r.stacja}
-</td>
-
-        <td contenteditable="true"
-            onkeydown="return blokujEnter(event)"
-            onblur="edytujPole(${index},'sinpo',this.innerText)">
-            ${r.sinpo}
-        </td>
-
-        <td contenteditable="true"
-            onkeydown="return blokujEnter(event)"
-            onblur="edytujPole(${index},'qth',this.innerText)">
-            ${r.qth}
-        </td>
-
-        <td contenteditable="true"
-            onkeydown="return blokujEnter(event)"
-            onblur="edytujPole(${index},'jezyk',this.innerText)">
-            ${r.jezyk}
-        </td>
-<td>
-
-<select
-    onchange="edytujQSL(${index},this.value)">
-
-    <option value=""
-        ${r.qsl === "" ? "selected" : ""}>
-        🔴
-    </option>
-
-    <option value="Wysłana"
-        ${r.qsl === "Wysłana" ? "selected" : ""}>
-        🟡
-    </option>
-
-    <option value="Otrzymana"
-        ${r.qsl === "Otrzymana" ? "selected" : ""}>
-        🟢
-    </option>
-
-</select>
-
-</td>
-        <td>
-
-        <button
-        class="noteBtn"
-        onclick="pokazUwagi(${index})">
-        Uwagi
-        </button>
-
-        <button
-        class="delBtn"
-        onclick="usun(${index})">
-        🗑
-        </button>
-
-        </td>
-
-        </tr>
-
-        `;
-
-                });
-
-            }
-
-            // EDYCJA POLA Z TABELI
-            function edytujPole(
-                index,
-                pole,
-                wartosc
-            ) {
-
-                wartosc = wartosc.trim();
-                if (pole === "data") {
-
-                    const dataTest = new Date(wartosc);
-
-                    if (
-                        isNaN(dataTest.getTime()) ||
-                        dataTest.toISOString().slice(0, 10) !== wartosc
-                    ) {
-
-                        alert("Niepoprawna data.");
-
-                        pokazTabele();
-
-                        return;
-                    }
-                }
-
-
-                if (pole === "czas") {
-
-                    if (
-                        !/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/
-                            .test(wartosc)
-                    ) {
-
-                        alert("Niepoprawny czas.");
-
-                        pokazTabele();
-
-                        return;
-                    }
-                }
-
-                if (pole === "sinpo") {
-
-                    if (!/^[1-5]{5}$/.test(wartosc)) {
-
-                        alert(
-                            "SINPO musi zawierać dokładnie 5 cyfr od 1 do 5 np. 54321"
-                        );
-
-                        pokazTabele();
-
-                        return;
-                    }
-                }
-
-                if (pole === "freq") {
-
-                    wartosc = wartosc.replace(/\s/g, "");
-
-                    if (!/^[0-9]+([.,][0-9]+)?$/.test(wartosc)) {
-
-                        alert(
-                            "Częstotliwość może zawierać tylko cyfry, spacje oraz opcjonalnie kropkę lub przecinek."
-                        );
-
-                        pokazTabele();
-
-                        return;
-                    }
-                }
-
-                log[index][pole] =
-                    wartosc;
-
-                zapisz();
-
-            }
-
-            // MODAL ZE SZCZEGÓŁAMI WPISU
-            function pokazUwagi(index) {
-
-                document.getElementById("modal").style.display = "block";
-
-                document.getElementById("modalContent").innerHTML =
-
-                    "<b>Stacja:</b> " +
-                    (log[index].stacja || "(brak)") +
-
-                    " - " +
-                    formatFreq(log[index].freq) +
-                    " kHz" +
-
-                    "<br>" +
-
-                    "<b>SINPO:</b> " +
-                    log[index].sinpo +
-
-                    "<br>" +
-
-                    (log[index].odbiornik || "-") +
-                    ", " +
-                    (log[index].antena || "-") +
-
-                    "<br><br>" +
-
-                    "<b>Uwagi:</b><br>" +
-
-                    (log[index].uwagi || "(brak uwag)");
-
-            }
-
-            // Zamknięcie okna modalnego
-            function zamknijModal() {
-
-                document.getElementById("modal").style.display = "none";
-
-            }
-
-            // USUWANIE POJEDYNCZEGO WPISU
-            function usun(index) {
-
-                if (
-                    !confirm(
-                        "Usunąć wpis?"
-                    )
-                )
-                    return;
-
-                log.splice(index, 1);
-
-                zapisz();
-
-                pokazTabele();
-
-            }
-
-            // CZYSZCZENIE CAŁEGO LOGU
-            function usunWszystko() {
-
-                if (
-                    !confirm(
-                        "Usunąć cały log?"
-                    )
-                )
-                    return;
-
-                log = [];
-
-                zapisz();
-
-                pokazTabele();
-
-                document
-                    .getElementById("uwagiBox")
-                    .style.display = "none";
-
-            }
-
-            // EKSPORT DO CSV
-            function eksportCSV() {
-
-                let csv =
-                    "DataUTC,CzasUTC,Czestotliwosc,Stacja,QTH,Jezyk,SINPO,QSL,Odbiornik,Antena,Uwagi\n";
-
-                log.forEach(r => {
-
-                    csv +=
-
-                        `"${r.data}","${r.czas}","${r.freq}","${r.stacja}","${r.qth}","${r.jezyk}","${r.sinpo}","${r.qsl}","${r.odbiornik}","${r.antena}","${r.uwagi.replace(/"/g, '""')}"\n`
-
-                });
-
-                const blob =
-                    new Blob(
-                        ["\uFEFF" + csv],
-                        {
-                            type:
-                                "text/csv;charset=utf-8;"
-                        }
-                    );
-
-                const a =
-                    document.createElement("a");
-
-                a.href =
-                    URL.createObjectURL(blob);
-
-                a.download =
-                    "Broadcast_DX_Log.csv";
-
-                a.click();
-
-            }
-
-            // IMPORT Z PLIKU CSV – łączenie z deduplikacją
-            document.getElementById("importCSV").addEventListener("change", function (e) {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                const reader = new FileReader();
-
-                reader.onload = function (event) {
-                    const text = event.target.result;
-                    const lines = text.trim().split(/\r?\n/);
-
-                    const importowane = [];
-
-                    for (let i = 1; i < lines.length; i++) {
-                        let cols = lines[i].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
-                        if (!cols) continue;
-
-                        cols = cols.map(x => x.replace(/^"/, "").replace(/"$/, ""));
-
-                        importowane.push({
-                            data: (cols[0] || "").trim(),
-                            czas: (cols[1] || "").trim(),
-                            freq: (cols[2] || "").trim(),
-                            stacja: (cols[3] || "").trim(),
-                            qth: (cols[4] || "").trim(),
-                            jezyk: (cols[5] || "").trim(),
-                            sinpo: (cols[6] || "").trim(),
-                            qsl: (cols[7] || "").trim(),
-                            odbiornik: (cols[8] || "").trim(),
-                            antena: (cols[9] || "").trim(),
-                            uwagi: cols[10] || ""
-                        });
-                    }
-
-                    // Jeśli w logu już coś jest – potwierdzenie trybu łączenia
-                    if (log.length > 0) {
-                        const ok = confirm(
-                            `W logu jest już ${log.length} wpisów.\n\n` +
-                            `OK  = POŁĄCZ (dodaj nowe, zaktualizuj istniejące, bez duplikatów)\n` +
-                            `Anuluj = przerwij import\n\n` +
-                            `Aby ZASTĄPIĆ cały log – najpierw użyj przycisku „Usuń cały log”.`
-                        );
-                        if (!ok) {
-                            e.target.value = "";
-                            return;
-                        }
-                    }
-
-                    // Normalizacja kHz do porównania
-                    const normFreq = f =>
-                        (f || "").toString().replace(/\s/g, "").replace(",", ".");
-
-                    const klucz = r =>
-                        `${r.data}|${r.czas}|${normFreq(r.freq)}|${r.stacja.toLowerCase()}`;
-
-                    // Mapa istniejących wpisów
-                    const mapa = new Map();
-                    log.forEach((r, i) => mapa.set(klucz(r), i));
-
-                    let dodane = 0, zaktualizowane = 0, bezZmian = 0;
-
-                    importowane.forEach(r => {
-                        const k = klucz(r);
-
-                        if (mapa.has(k)) {
-                            const idx = mapa.get(k);
-                            const stary = log[idx];
-
-                            const pola = ["data", "czas", "freq", "stacja", "qth", "jezyk",
-                                "sinpo", "qsl", "odbiornik", "antena", "uwagi"];
-
-                            const rozni = pola.some(p => (stary[p] || "") !== (r[p] || ""));
-
-                            if (rozni) {
-                                log[idx] = { ...stary, ...r };
-                                zaktualizowane++;
-                            } else {
-                                bezZmian++;
-                            }
-                        } else {
-                            log.push(r);
-                            mapa.set(k, log.length - 1);
-                            dodane++;
-                        }
-                    });
-
-                    // Uporządkowanie po dacie/godzinie malejąco
-                    log.sort((a, b) => {
-                        const da = new Date(a.data + "T" + a.czas);
-                        const db = new Date(b.data + "T" + b.czas);
-                        return db - da;
-                    });
-
-                    zapisz();
-                    pokazTabele();
-
-                    alert(
-                        `Import zakończony.\n\n` +
-                        `Dodano nowych:        ${dodane}\n` +
-                        `Zaktualizowano:       ${zaktualizowane}\n` +
-                        `Bez zmian (duplikaty): ${bezZmian}\n\n` +
-                        `Łącznie w logu: ${log.length} wpisów.`
-                    );
-
-                    e.target.value = "";
-                };
-
-                reader.readAsText(file, "UTF-8");
             });
 
-            // INICJALIZACJA
+        document
+            .getElementById("freq")
+            .addEventListener("input", function () {
+
+                this.value =
+                    this.value.replace(/[^0-9.,]/g, "");
+
+            });
+
+        // AUTOMATYCZNY ZAPIS USTAWIEŃ SPRZĘTU I LOKALIZACJI
+        document.getElementById("odbiornik").addEventListener("input", zapiszUstawienia);
+        document.getElementById("antena").addEventListener("input", zapiszUstawienia);
+        document.getElementById("qthOdbiorcy").addEventListener("input", zapiszUstawienia);
+
+        // ZAPIS DO LOCALSTORAGE
+        function zapisz() {
+
+            localStorage.setItem(
+                "broadcastDXLog",
+                JSON.stringify(log)
+            );
+
+            document.getElementById("licznik").textContent = log.length;
+
+            const wyslane = log.filter(
+                r => r.qsl === "Wysłana"
+            ).length;
+
+            const odebrane = log.filter(
+                r => r.qsl === "Otrzymana"
+            ).length;
+
+            document.getElementById("licznikWyslanych").textContent = wyslane;
+            document.getElementById("licznikOdebranych").textContent = odebrane;
+
+        }
+
+        // ZAPIS USTAWIEŃ SPRZĘTU I LOKALIZACJI
+        function zapiszUstawienia() {
+
+            ustawienia.odbiornik = document.getElementById("odbiornik").value;
+            ustawienia.antena = document.getElementById("antena").value;
+            ustawienia.qthOdbiorcy = document.getElementById("qthOdbiorcy").value;
+
+            localStorage.setItem(
+                "broadcastDXUstawienia",
+                JSON.stringify(ustawienia)
+            );
+
+        }
+
+        // WCZYTANIE USTAWIEŃ
+        function wczytajUstawienia() {
+
+            document.getElementById("odbiornik").value = ustawienia.odbiornik || "";
+            document.getElementById("antena").value = ustawienia.antena || "";
+            document.getElementById("qthOdbiorcy").value = ustawienia.qthOdbiorcy || "";
+
+        }
+
+        // POBIERANIE AKTUALNEJ DATY/CZASU UTC
+        function pobierzUTC() {
+
+            const d = new Date();
+
+            return {
+                data: d.toISOString().slice(0, 10),
+                czas: d.toISOString().slice(11, 19)
+            };
+
+        }
+
+        // DODAWANIE NOWEGO WPISU
+        function dodajWpis() {
+
+            const sinpo =
+                document.getElementById("sinpo")
+                    .value
+                    .trim();
+
+            if (!/^[1-5]{5}$/.test(sinpo)) {
+
+                alert(
+                    "SINPO musi zawierać dokładnie 5 cyfr od 1 do 5."
+                );
+
+                return;
+            }
+
+            const utc =
+                pobierzUTC();
+            if (
+                document.getElementById("freq").value.trim() === ""
+            ) {
+                alert("Podaj częstotliwość.");
+                return;
+            }
+
+            if (
+                document.getElementById("stacja").value.trim() === ""
+            ) {
+                alert("Podaj nazwę stacji.");
+                return;
+            }
+
+            log.push({
+
+                data: utc.data,
+                czas: utc.czas,
+                freq: document.getElementById("freq").value,
+                stacja: document.getElementById("stacja").value,
+                qth: document.getElementById("qth").value,
+                qthOdbiorcy: document.getElementById("qthOdbiorcy").value,
+                jezyk: document.getElementById("jezyk").value,
+                sinpo: document.getElementById("sinpo").value,
+                qsl: "",
+                odbiornik: document.getElementById("odbiornik").value,
+                antena: document.getElementById("antena").value,
+                uwagi: document.getElementById("uwagi").value
+
+            });
+
+            // Nie czyścimy odbiornika, anteny i QTH odbiorcy
+            document.getElementById("freq").value = "";
+            document.getElementById("stacja").value = "";
+            document.getElementById("qth").value = "";
+            document.getElementById("jezyk").value = "";
+            document.getElementById("sinpo").value = "";
+            document.getElementById("uwagi").value = "";
+
             zapisz();
             pokazTabele();
-            function edytujQSL(index, wartosc) {
 
-                log[index].qsl = wartosc;
+        }
+
+        // BLOKADA ENTER
+        function blokujEnter(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                e.target.blur();
+                return false;
+            }
+            return true;
+        }
+
+        // RENDEROWANIE TABELI
+        function pokazTabele() {
+
+            const tabela = document.getElementById("tabela");
+            tabela.innerHTML = "";
+
+            const filtr = document.getElementById("szukaj").value.toLowerCase();
+
+            log.sort((a, b) => {
+                const dataA = new Date(a.data + "T" + a.czas);
+                const dataB = new Date(b.data + "T" + b.czas);
+                return dataB - dataA;
+            });
+
+            log.forEach((r, index) => {
+
+                const txt = JSON.stringify(r).toLowerCase();
+
+                if (!txt.includes(filtr)) return;
+
+                tabela.innerHTML += `
+                <tr>
+                    <td contenteditable="true" onkeydown="return blokujEnter(event)" onblur="edytujPole(${index},'data',this.innerText)">${r.data}</td>
+                    <td contenteditable="true" onkeydown="return blokujEnter(event)" onblur="edytujPole(${index},'czas',this.innerText)">${r.czas}</td>
+                    <td contenteditable="true" onkeydown="return blokujEnter(event)" onblur="edytujPole(${index},'freq',this.innerText)">${formatFreq(r.freq)}</td>
+                    <td contenteditable="true" onkeydown="return blokujEnter(event)" onblur="edytujPole(${index},'stacja',this.innerText)">${r.stacja}</td>
+                    <td contenteditable="true" onkeydown="return blokujEnter(event)" onblur="edytujPole(${index},'sinpo',this.innerText)">${r.sinpo}</td>
+                    <td contenteditable="true" onkeydown="return blokujEnter(event)" onblur="edytujPole(${index},'qth',this.innerText)">${r.qth || ""}</td>
+                    <td contenteditable="true" onkeydown="return blokujEnter(event)" onblur="edytujPole(${index},'qthOdbiorcy',this.innerText)">${r.qthOdbiorcy || ""}</td>
+                    <td contenteditable="true" onkeydown="return blokujEnter(event)" onblur="edytujPole(${index},'jezyk',this.innerText)">${r.jezyk}</td>
+                    <td>
+                        <select onchange="edytujQSL(${index},this.value)">
+                            <option value="" ${r.qsl === "" ? "selected" : ""}>🔴</option>
+                            <option value="Wysłana" ${r.qsl === "Wysłana" ? "selected" : ""}>🟡</option>
+                            <option value="Otrzymana" ${r.qsl === "Otrzymana" ? "selected" : ""}>🟢</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="noteBtn" onclick="pokazUwagi(${index})">Info</button>
+                        <button class="delBtn" onclick="usun(${index})">🗑</button>
+                    </td>
+                </tr>
+                `;
+            });
+        }
+
+        // EDYCJA POLA
+        function edytujPole(index, pole, wartosc) {
+
+            wartosc = wartosc.trim();
+
+            if (pole === "data") {
+                const dataTest = new Date(wartosc);
+                if (isNaN(dataTest.getTime()) || dataTest.toISOString().slice(0, 10) !== wartosc) {
+                    alert("Niepoprawna data.");
+                    pokazTabele();
+                    return;
+                }
+            }
+
+            if (pole === "czas") {
+                if (!/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/.test(wartosc)) {
+                    alert("Niepoprawny czas.");
+                    pokazTabele();
+                    return;
+                }
+            }
+
+            if (pole === "sinpo") {
+                if (!/^[1-5]{5}$/.test(wartosc)) {
+                    alert("SINPO musi zawierać dokładnie 5 cyfr od 1 do 5 np. 54321");
+                    pokazTabele();
+                    return;
+                }
+            }
+
+            if (pole === "freq") {
+                wartosc = wartosc.replace(/\s/g, "");
+                if (!/^[0-9]+([.,][0-9]+)?$/.test(wartosc)) {
+                    alert("Częstotliwość może zawierać tylko cyfry, spacje oraz opcjonalnie kropkę lub przecinek.");
+                    pokazTabele();
+                    return;
+                }
+            }
+
+            log[index][pole] = wartosc;
+            zapisz();
+        }
+
+        // MODAL Z KARTĄ QSL
+        function pokazUwagi(index) {
+
+            const r = log[index];
+            const sinpoStr = (r.sinpo || "").padEnd(5, "-").slice(0, 5);
+            const litery = ["S", "I", "N", "P", "O"];
+
+            const statusQSL =
+                r.qsl === "Otrzymana" ? "🟢 OTRZYMANA"
+                    : r.qsl === "Wysłana" ? "🟡 WYSŁANA"
+                        : "🔴 BRAK";
+
+            document.getElementById("modal").style.display = "block";
+            document.body.classList.add("modal-open");
+
+            document.getElementById("modalQslStatus").innerHTML = statusQSL;
+
+            // KARTA QSL JEST TERAZ W CAŁOŚCI PO ANGIELSKU
+            document.getElementById("modalContent").innerHTML = `
+
+                <div class="qslCard">
+
+                    <div class="qslHeader">
+                        <span>QSL – CONFIRMATION OF RECEPTION</span>
+                    </div>
+
+                    <div class="qslStation">${r.stacja || "(no name)"}</div>
+                    <div class="qslFreq">${formatFreq(r.freq)} kHz</div>
+
+                    <div class="qslGrid">
+                        <div>
+                            <div class="lbl">Date UTC</div>
+                            <div class="val">${r.data || "-"}</div>
+                        </div>
+                        <div>
+                            <div class="lbl">Time UTC</div>
+                            <div class="val">${r.czas || "-"}</div>
+                        </div>
+                        <div>
+                            <div class="lbl">Language</div>
+                            <div class="val">${r.jezyk || "-"}</div>
+                        </div>
+                    </div>
+
+                    <div class="qslSinpo">
+                        ${litery.map((l, i) => `
+                            <div>
+                                <div class="letter">${l}</div>
+                                <div class="num">${sinpoStr[i]}</div>
+                            </div>
+                        `).join("")}
+                    </div>
+
+                    <div class="qslRow"><b>QTH (Rx)</b> ${r.qthOdbiorcy || "-"}</div>
+                    <div class="qslRow"><b>Receiver</b> ${r.odbiornik || "-"}</div>
+                    <div class="qslRow"><b>Antenna</b> ${r.antena || "-"}</div>
+
+                    <div class="qslSignature">
+                        <span>Broadcast DX Logger by SQ1KSM</span>
+                        <span>SINPO Report – Listener's Signature</span>
+                    </div>
+
+                </div>
+
+                <div class="qslUwagiTitle">📝 Uwagi</div>
+                <div class="qslNotes">${r.uwagi || "(brak uwag)"}</div>
+            `;
+
+        }
+
+        function zamknijModal() {
+            document.getElementById("modal").style.display = "none";
+            document.body.classList.remove("modal-open");
+            document.body.classList.remove("print-only-card");
+            document.body.classList.remove("print-sticker");
+        }
+
+        // FUNKCJA DRUKOWANIA
+        function drukuj(tryb) {
+            document.body.classList.remove("print-only-card", "print-sticker");
+
+            if (tryb === 'karta') {
+                document.body.classList.add("print-only-card");
+            } else if (tryb === 'naklejka') {
+                document.body.classList.add("print-sticker");
+            }
+
+            window.print();
+
+            setTimeout(() => {
+                document.body.classList.remove("print-only-card", "print-sticker");
+            }, 1000);
+        }
+
+        function usun(index) {
+            if (!confirm("Usunąć wpis?")) return;
+            log.splice(index, 1);
+            zapisz();
+            pokazTabele();
+        }
+
+        function usunWszystko() {
+            if (!confirm("Usunąć cały log?")) return;
+            log = [];
+            zapisz();
+            pokazTabele();
+            document.getElementById("uwagiBox").style.display = "none";
+        }
+
+        // EKSPORT DO CSV (12-kolumnowy)
+        function eksportCSV() {
+
+            let csv = "DataUTC,CzasUTC,Czestotliwosc,Stacja,QTH_Nadajnika,QTH_Odbiorcy,Jezyk,SINPO,QSL,Odbiornik,Antena,Uwagi\n";
+
+            log.forEach(r => {
+                csv += `"${r.data}","${r.czas}","${r.freq}","${r.stacja}","${r.qth}","${r.qthOdbiorcy || ""}","${r.jezyk}","${r.sinpo}","${r.qsl}","${r.odbiornik}","${r.antena}","${r.uwagi.replace(/"/g, '""')}"\n`;
+            });
+
+            const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "Broadcast_DX_Log.csv";
+            a.click();
+        }
+
+        // IMPORT Z PLIKU CSV
+        document.getElementById("importCSV").addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const text = event.target.result;
+                const lines = text.trim().split(/\r?\n/);
+                const importowane = [];
+
+                const parseCSVLine = (line) => {
+                    let result = [];
+                    let cur = '';
+                    let inQuotes = false;
+                    for (let i = 0; i < line.length; i++) {
+                        const char = line[i];
+                        if (char === '"') {
+                            if (inQuotes && line[i + 1] === '"') {
+                                cur += '"';
+                                i++;
+                            } else {
+                                inQuotes = !inQuotes;
+                            }
+                        } else if (char === ',' && !inQuotes) {
+                            result.push(cur);
+                            cur = '';
+                        } else {
+                            cur += char;
+                        }
+                    }
+                    result.push(cur);
+                    return result;
+                };
+
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+
+                    const cols = parseCSVLine(line);
+                    const r = {
+                        data: (cols[0] || "").trim(),
+                        czas: (cols[1] || "").trim(),
+                        freq: (cols[2] || "").trim(),
+                        stacja: (cols[3] || "").trim(),
+                        qth: "",
+                        qthOdbiorcy: "",
+                        jezyk: "",
+                        sinpo: "",
+                        qsl: "",
+                        odbiornik: "",
+                        antena: "",
+                        uwagi: ""
+                    };
+
+                    if (cols.length >= 12) {
+                        r.qth = (cols[4] || "").trim();
+                        r.qthOdbiorcy = (cols[5] || "").trim();
+                        r.jezyk = (cols[6] || "").trim();
+                        r.sinpo = (cols[7] || "").trim();
+                        r.qsl = (cols[8] || "").trim();
+                        r.odbiornik = (cols[9] || "").trim();
+                        r.antena = (cols[10] || "").trim();
+                        r.uwagi = cols[11] || "";
+                    } else {
+                        r.qth = (cols[4] || "").trim();
+                        r.qthOdbiorcy = "";
+                        r.jezyk = (cols[5] || "").trim();
+                        r.sinpo = (cols[6] || "").trim();
+                        r.qsl = (cols[7] || "").trim();
+                        r.odbiornik = (cols[8] || "").trim();
+                        r.antena = (cols[9] || "").trim();
+                        r.uwagi = cols[10] || "";
+                    }
+                    importowane.push(r);
+                }
+
+                if (log.length > 0) {
+                    const ok = confirm(
+                        `W logu jest już ${log.length} wpisów.\n\n` +
+                        `OK  = POŁĄCZ (dodaj nowe, zaktualizuj istniejące, bez duplikatów)\n` +
+                        `Anuluj = przerwij import\n\n` +
+                        `Aby ZASTĄPIĆ cały log – najpierw użyj przycisku „Usuń cały log”.`
+                    );
+                    if (!ok) {
+                        e.target.value = "";
+                        return;
+                    }
+                }
+
+                const normFreq = f => (f || "").toString().replace(/\s/g, "").replace(",", ".");
+                const klucz = r => `${r.data}|${r.czas}|${normFreq(r.freq)}|${r.stacja.toLowerCase()}`;
+
+                const mapa = new Map();
+                log.forEach((r, i) => mapa.set(klucz(r), i));
+
+                let dodane = 0, zaktualizowane = 0, bezZmian = 0;
+
+                importowane.forEach(r => {
+                    const k = klucz(r);
+
+                    if (mapa.has(k)) {
+                        const idx = mapa.get(k);
+                        const stary = log[idx];
+
+                        const pola = ["data", "czas", "freq", "stacja", "qth", "qthOdbiorcy", "jezyk",
+                            "sinpo", "qsl", "odbiornik", "antena", "uwagi"];
+
+                        const rozni = pola.some(p => (stary[p] || "") !== (r[p] || ""));
+
+                        if (rozni) {
+                            log[idx] = { ...stary, ...r };
+                            zaktualizowane++;
+                        } else {
+                            bezZmian++;
+                        }
+                    } else {
+                        log.push(r);
+                        mapa.set(k, log.length - 1);
+                        dodane++;
+                    }
+                });
+
+                log.sort((a, b) => {
+                    const da = new Date(a.data + "T" + a.czas);
+                    const db = new Date(b.data + "T" + b.czas);
+                    return db - da;
+                });
 
                 zapisz();
+                pokazTabele();
 
-            }
-        </script>
+                alert(
+                    `Import zakończony.\n\n` +
+                    `Dodano nowych:        ${dodane}\n` +
+                    `Zaktualizowano:       ${zaktualizowane}\n` +
+                    `Bez zmian (duplikaty): ${bezZmian}\n\n` +
+                    `Łącznie w logu: ${log.length} wpisów.`
+                );
+
+                e.target.value = "";
+            };
+
+            reader.readAsText(file, "UTF-8");
+        });
+
+        // INICJALIZACJA
+        zapisz();
+        pokazTabele();
+        wczytajUstawienia();
+
+        function edytujQSL(index, wartosc) {
+            log[index].qsl = wartosc;
+            zapisz();
+        }
+    </script>
 
 </body>
 

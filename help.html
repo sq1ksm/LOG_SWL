@@ -127,27 +127,6 @@
         .backBtn:hover {
             background: #0062cc;
         }
-
-        .badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 13px;
-            color: #fff;
-            font-weight: bold;
-        }
-
-        .b-red {
-            background: #dc3545;
-        }
-
-        .b-yellow {
-            background: #e6a700;
-        }
-
-        .b-green {
-            background: #28a745;
-        }
     </style>
 </head>
 
@@ -157,7 +136,7 @@
 
         <h1>📻 Broadcast DX Logger – Pomoc</h1>
         <p class="opis">
-            Lokalny dziennik nasłuchów radiowych V1.1
+            Lokalny dziennik nasłuchów radiowych V1.4
         </p>
 
         <div class="warning">
@@ -192,8 +171,8 @@
                         Wymagane.</td>
                 </tr>
                 <tr>
-                    <td><b>Miejsce nadawania</b></td>
-                    <td>Miejsce położenia masztu nadajnika - QTH. (opcjonalne).</td>
+                    <td><b>Miejsce nadawania (QTH nad.)</b></td>
+                    <td>Miejsce położenia masztu nadajnika (opcjonalne).</td>
                 </tr>
                 <tr>
                     <td><b>Język</b></td>
@@ -217,11 +196,17 @@
                     <td><b>Antena</b></td>
                     <td>Rodzaj / model anteny (opcjonalne).</td>
                 </tr>
+                <tr>
+                    <td><b>Miejsce odbioru (QTH odb.)</b></td>
+                    <td>Miejsce, z którego prowadzisz nasłuch (opcjonalne).</td>
+                </tr>
             </tbody>
         </table>
 
         <p>Data i czas UTC są dodawane <b>automatycznie</b> w chwili dodania wpisu
             (na podstawie zegara systemowego).</p>
+        <p>Pola <b>Odbiornik</b>, <b>Antena</b> oraz <b>Miejsce odbioru</b> są zapamiętywane w przeglądarce.
+            Po odświeżeniu strony formularz wypełni się automatycznie Twoimi ostatnimi ustawieniami.</p>
 
         <h2>2. Tabela wpisów</h2>
 
@@ -235,6 +220,7 @@
             <li><b>Czas UTC</b> – format <code>GG:MM:SS</code> w 24h (np. <code>21:14:00</code>)</li>
             <li><b>SINPO</b> – walidowane: dokładnie 5 cyfr z zakresu 1–5</li>
             <li><b>Częstotliwość</b> – walidowane: cyfry + opcjonalna kropka/przecinek</li>
+            <li><b>QTH odb.</b> – miejsce odbioru (edytowalne)</li>
         </ul>
 
         <p>Błędne dane (np. litera zamiast cyfry w SINPO, zły format daty) zostaną
@@ -365,9 +351,21 @@
                     <td>Usuwa wszystkie wpisy (po potwierdzeniu).</td>
                 </tr>
                 <tr>
-                    <td><b>Uwagi</b> (niebieski, w tabeli)</td>
-                    <td>Otwiera okno ze szczegółami wpisu (pełne uwagi, odbiornik,
-                        antena).</td>
+                    <td><b>Info</b> (niebieski, w tabeli)</td>
+                    <td>Otwiera okno ze szczegółami wpisu: status QSL, podgląd karty QSL, uwagi, odbiornik, antena itp.
+                        W oknie dostępne są też przyciski drukowania.</td>
+                </tr>
+                <tr>
+                    <td><b>Drukuj samą QSL</b> (w oknie Info)</td>
+                    <td>Drukuje tylko kartę QSL (14x9 cm) bez sekcji z uwagami.</td>
+                </tr>
+                <tr>
+                    <td><b>Drukuj z uwagami</b> (w oknie Info)</td>
+                    <td>Drukuje kartę QSL (14x9 cm) wraz z Twoimi uwagami pod spodem.</td>
+                </tr>
+                <tr>
+                    <td><b>Drukuj naklejkę</b> (w oknie Info)</td>
+                    <td>Drukuje mniejszą wersję naklejki (9x5 cm) bez nagłówka i stopki.</td>
                 </tr>
                 <tr>
                     <td><b>🗑</b> (czerwony, w tabeli)</td>
@@ -380,7 +378,7 @@
 
         <p>Pole <b>„Szukaj…”</b> filtruje wpisy na żywo. Wyszukiwanie obejmuje
             <b>wszystkie pola</b> każdego wpisu (data, częstotliwość, stacja,
-            miejsce nadawania, język, SINPO, QSL, odbiornik, antena, uwagi), niezależnie od
+            miejsce nadawania, miejsce odbioru, język, SINPO, QSL, odbiornik, antena, uwagi), niezależnie od
             wielkości liter.
         </p>
 
@@ -391,10 +389,13 @@
         <p>
             <code>DataUTC</code>, <code>CzasUTC</code>,
             <code>Czestotliwosc</code>, <code>Stacja</code>,
-            <code>QTH</code>, <code>Jezyk</code>, <code>SINPO</code>,
+            <code>QTH_Nadajnika</code>, <code>QTH_Odbiorcy</code>, <code>Jezyk</code>, <code>SINPO</code>,
             <code>QSL</code>, <code>Odbiornik</code>, <code>Antena</code>,
             <code>Uwagi</code>
         </p>
+
+        <p>Plik ma 12 kolumn. Stare pliki (11 kolumn) są nadal obsługiwane przy imporcie (pole <code>QTH_Odbiorcy</code>
+            pozostanie wtedy puste).</p>
 
         <p>Dozwolone wartości w kolumnie <b>QSL</b>:
             <code>(puste)</code>, <code>Wysłana</code>, <code>Otrzymana</code>.
