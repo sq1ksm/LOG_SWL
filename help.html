@@ -157,7 +157,7 @@
 
         <h1>📻 Broadcast DX Logger – Pomoc</h1>
         <p class="opis">
-            Lokalny dziennik nasłuchów radiowych V1.0
+            Lokalny dziennik nasłuchów radiowych V1.1
         </p>
 
         <div class="warning">
@@ -205,17 +205,17 @@
                         Szczegóły w sekcji 4.</td>
                 </tr>
                 <tr>
+                    <td><b>Uwagi</b></td>
+                    <td>Opis odbioru, fading, zakłócenia, program, godziny
+                        itp. (opcjonalne).</td>
+                </tr>
+                <tr>
                     <td><b>Odbiornik</b></td>
                     <td>Model odbiornika (opcjonalne).</td>
                 </tr>
                 <tr>
                     <td><b>Antena</b></td>
                     <td>Rodzaj / model anteny (opcjonalne).</td>
-                </tr>
-                <tr>
-                    <td><b>Uwagi</b></td>
-                    <td>Opis odbioru, fading, zakłócenia, program, godziny
-                        itp. (opcjonalne).</td>
                 </tr>
             </tbody>
         </table>
@@ -238,7 +238,7 @@
         </ul>
 
         <p>Błędne dane (np. litera zamiast cyfry w SINPO, zły format daty) zostaną
-            odrzucone i przywrócone zostanie poprzednie poprawne значение.</p>
+            odrzucone i przywrócona zostanie poprzednia poprawna wartość.</p>
 
         <h2>3. Status QSL</h2>
 
@@ -351,7 +351,9 @@
                 <tr>
                     <td><b>Import CSV</b> (szary)</td>
                     <td>Wczytuje plik CSV w formacie zgodnym z eksportem.
-                        <b>Uwaga:</b> import <b>nadpisuje</b> cały dotychczasowy log!
+                        Domyślnie <b>łączy</b> z istniejącym logiem: nowe wpisy dodaje,
+                        istniejące aktualizuje, duplikaty pomija (szczegóły w sekcji 7).
+                        Aby <b>zastąpić</b> cały log – najpierw użyj „Usuń cały log”.
                     </td>
                 </tr>
                 <tr>
@@ -402,13 +404,40 @@
             pomijany. Znaki <code>"</code> w polach tekstowych są podwajane
             (<code>""</code>) zgodnie ze standardem CSV.</p>
 
+        <h3>Deduplikacja przy imporcie</h3>
+
+        <p>Import <b>nie nadpisuje</b> bezmyślnie całego logu. Każdy wpis z pliku
+            CSV jest porównywany z istniejącymi po kluczu:</p>
+
+        <p><code>DataUTC + CzasUTC + Częstotliwość (bez spacji) + Stacja (bez względu na wielkość liter)</code></p>
+
+        <p>W zależności od wyniku porównania:</p>
+
+        <ul>
+            <li><b>wpis nie istnieje</b> – zostaje dodany do logu,</li>
+            <li><b>wpis istnieje i dane są identyczne</b> – zostaje pominięty (bez duplikatu),</li>
+            <li><b>wpis istnieje, ale dane się różnią</b> (np. inny status QSL,
+                dopisane uwagi, uzupełniony odbiornik/antena) – zostaje
+                <b>zaktualizowany</b> zawartością z pliku CSV.
+            </li>
+        </ul>
+
+        <p>Po zakończeniu importu wyświetlany jest raport: ile wpisów dodano,
+            ile zaktualizowano, ile pominięto jako duplikaty, oraz łączna liczba
+            wpisów w logu.</p>
+
+        <p>Jeśli log nie jest pusty, przed importem pojawia się okno
+            potwierdzenia – można wtedy anulować import bez utraty danych.</p>
+
         <h2>8. Zalecenia praktyczne</h2>
 
         <ol>
             <li><b>Eksportuj CSV</b> po każdej sesji nasłuchowej – to jedyna
                 kopia zapasowa poza przeglądarką.</li>
-            <li>Przed importem CSV <b>rób kopię</b> aktualnego logu
-                (eksport), bo import nadpisuje dane.</li>
+            <li>Przed importem CSV warto <b>również</b> zrobić eksport aktualnego
+                logu. Import co prawda domyślnie <b>łączy</b> dane (nie kasuje),
+                ale kopia chroni przed skutkami pomyłki – np. gdy plik CSV
+                zawiera błędne dane i chcemy móc wrócić do poprzedniego stanu.</li>
             <li>Używaj tego samego formatu czasu UTC – ułatwia to porównywanie
                 wpisów i dopasowywanie do publikowanych harmonogramów stacji.</li>
             <li>W polu <b>Uwagi</b> warto zapisywać godzinę rozpoczęcia i
@@ -419,7 +448,7 @@
 
         <ul>
             <li>Dane trzymane są w <b>localStorage</b> – jedna przeglądarka = jeden log.<br>
-                Synchronizacja między urządzeniami nie jest przewidziana, trzeba kożystać z importu i eksportu logu.
+                Synchronizacja między urządzeniami nie jest przewidziana, trzeba korzystać z importu i eksportu logu.
             </li>
             <li>Brak automatycznej kopii zapasowej – tylko ręczny eksport CSV.</li>
         </ul>

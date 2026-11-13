@@ -70,6 +70,23 @@
             gap: 12px;
         }
 
+        /* Siatka: Uwagi | Odbiornik | Antena */
+        .grid.grid3 {
+            grid-template-columns: 2fr 1fr 1fr;
+        }
+
+        .grid.grid3 textarea {
+            min-height: 36px;
+            resize: vertical;
+        }
+
+        /* Na małych ekranach układamy pionowo */
+        @media (max-width: 700px) {
+            .grid.grid3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
         label {
             display: block;
             margin-bottom: 4px;
@@ -124,23 +141,19 @@
             margin-top: 20px;
         }
 
-        /* --- NOWE STYLE DLA TABELI RESPONSYWNEJ --- */
+        /* --- TABELA RESPONSYWNA --- */
         .table-responsive {
             width: 100%;
             overflow-x: auto;
-            /* Włącza poziomy pasek przewijania, gdy tabela jest szersza niż ekran */
             -webkit-overflow-scrolling: touch;
-            /* Płynne przewijanie na urządzeniach mobilnych */
             margin-top: 15px;
         }
 
         table {
             width: 100%;
             min-width: 800px;
-            /* Zapobiega nadmiernemu ściskaniu kolumn na małych ekranach */
             border-collapse: collapse;
             margin-top: 0;
-            /* Margines przeniesiony do .table-responsive */
         }
 
         th {
@@ -202,7 +215,7 @@
             color: #666;
         }
 
-        /* --- DODATKOWE DOSTOSOWANIE DLA MAŁYCH EKRANÓW (SMARTFONY) --- */
+        /* --- MAŁE EKRANY (SMARTFONY) --- */
         @media (max-width: 600px) {
             body {
                 margin: 10px;
@@ -291,7 +304,12 @@
             </div>
         </div>
 
-        <div class="grid" style="margin-top:10px;">
+        <div class="grid grid3" style="margin-top:10px;">
+
+            <div>
+                <label>Uwagi</label>
+                <textarea id="uwagi" placeholder="Opis odbioru, fading, zakłócenia, program..."></textarea>
+            </div>
 
             <div>
                 <label>Odbiornik</label>
@@ -302,13 +320,6 @@
                 <label>Antena</label>
                 <input type="text" id="antena">
             </div>
-
-        </div>
-
-        <div style="margin-top:15px">
-            <label>Uwagi</label>
-
-            <textarea id="uwagi" placeholder="Opis odbioru, fading, zakłócenia, program..."></textarea>
 
         </div>
 
@@ -342,7 +353,6 @@
 
         </div>
 
-        <!-- OWIJAMY TABELĘ W KONTENER Z PRZEWIJANIEM -->
         <div class="table-responsive">
             <table>
 
@@ -371,7 +381,7 @@
         <div id="uwagiBox"></div>
 
         <div class="footer">
-            Broadcast DX Logger v1.0| Copyright © Sławek Kuchowicz
+            Broadcast DX Logger v1.1 | Copyright © Sławek Kuchowicz
         </div>
         <div id="modal" style="display:none;
             position:fixed;
@@ -404,16 +414,38 @@
         </div>
         <script>
             // GŁÓWNY STAN APLIKACJI
-            // Wczytanie logu z localStorage (lub pusta tablica, jeśli brak)
-
             let log =
                 JSON.parse(
                     localStorage.getItem("broadcastDXLog")
                 ) || [];
 
-            // ZEGAR UTC
-            // Odświeża wyświetlanie aktualnego czasu UTC co sekundę
+            // NOWA FUNKCJA FORMATUJĄCA CZĘSTOTLIWOŚĆ
+            // Wstawia spację co trzy cyfry (np. 6070 -> 6 070)
+            function formatFreq(freq) {
+                if (freq === undefined || freq === null) return "";
+                let str = freq.toString().trim();
+                if (str === "") return "";
 
+                // Usuwamy ewentualne stare spacje
+                str = str.replace(/\s/g, '');
+
+                // Sprawdzamy czy to liczba (uwzględniając przecinek)
+                if (isNaN(Number(str.replace(',', '.')))) return freq;
+
+                // Dzielimy na część całkowitą i dziesiętną
+                let parts = str.split(/[.,]/);
+                let intPart = parts[0];
+
+                // Wstawiamy spacje w części całkowitej
+                intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+                if (parts.length > 1) {
+                    return intPart + "," + parts[1];
+                }
+                return intPart;
+            }
+
+            // ZEGAR UTC
             function aktualizujUTC() {
 
                 const d = new Date();
@@ -435,8 +467,8 @@
 
             setInterval(aktualizujUTC, 1000);
             aktualizujUTC();
+
             // WALIDACJA NA BIEŻĄCO
-            // Pole SINPO - dopuszczamy tylko cyfry 1-5
             document
                 .getElementById("sinpo")
                 .addEventListener("input", function () {
@@ -446,7 +478,6 @@
 
                 });
 
-            // Pole częstotliwości - tylko cyfry, kropka i przecinek
             document
                 .getElementById("freq")
                 .addEventListener("input", function () {
@@ -457,8 +488,6 @@
                 });
 
             // ZAPIS DO LOCALSTORAGE
-            // Zapisuje log i odświeża licznik wpisów
-
             function zapisz() {
 
                 localStorage.setItem(
@@ -481,9 +510,7 @@
 
             }
 
-            // POMOCNICZA FUNKCJA - POBIERANIE AKTUALNEJ DATY/CZASU UTC
-            // Zwraca obiekt { data: "YYYY-MM-DD", czas: "HH:MM:SS" }
-
+            // POBIERANIE AKTUALNEJ DATY/CZASU UTC
             function pobierzUTC() {
 
                 const d = new Date();
@@ -503,9 +530,6 @@
             }
 
             // DODAWANIE NOWEGO WPISU
-            // Waliduje SINPO, częstotliwość i stację, potem dodaje wpis
-            // i czyści formularz
-
             function dodajWpis() {
 
                 const sinpo =
@@ -576,8 +600,6 @@
             }
 
             // BLOKADA ENTER W KOMÓRKACH EDYTOWALNYCH
-            // Enter kończy edycję (blur) zamiast dodawać nową linię
-
             function blokujEnter(e) {
 
                 if (e.key === "Enter") {
@@ -593,9 +615,6 @@
             }
 
             // RENDEROWANIE TABELI
-            // Sortuje wpisy od najnowszych, filtruje po frazie w wyszukiwarce
-            // i buduje wiersze z edytowalnymi komórkami oraz przyciskami
-
             function pokazTabele() {
 
                 const tabela =
@@ -645,9 +664,7 @@
         <td contenteditable="true"
             onkeydown="return blokujEnter(event)"
             onblur="edytujPole(${index},'freq',this.innerText)">
-            ${isNaN(Number(r.freq))
-                            ? r.freq
-                            : Number(r.freq).toLocaleString('pl-PL')}
+            ${formatFreq(r.freq)}
         </td>
 
         <td contenteditable="true"
@@ -721,8 +738,6 @@
             }
 
             // EDYCJA POLA Z TABELI
-            // Waliduje wartość zależnie od kolumny i zapisuje ją w logu
-
             function edytujPole(
                 index,
                 pole,
@@ -801,8 +816,6 @@
             }
 
             // MODAL ZE SZCZEGÓŁAMI WPISU
-            // Pokazuje pełne dane wpisu łącznie z uwagami
-
             function pokazUwagi(index) {
 
                 document.getElementById("modal").style.display = "block";
@@ -813,11 +826,7 @@
                     (log[index].stacja || "(brak)") +
 
                     " - " +
-                    (
-                        isNaN(Number(log[index].freq))
-                            ? log[index].freq
-                            : Number(log[index].freq).toLocaleString('pl-PL')
-                    ) +
+                    formatFreq(log[index].freq) +
                     " kHz" +
 
                     "<br>" +
@@ -847,7 +856,6 @@
             }
 
             // USUWANIE POJEDYNCZEGO WPISU
-
             function usun(index) {
 
                 if (
@@ -866,7 +874,6 @@
             }
 
             // CZYSZCZENIE CAŁEGO LOGU
-
             function usunWszystko() {
 
                 if (
@@ -889,8 +896,6 @@
             }
 
             // EKSPORT DO CSV
-            // Buduje plik CSV (z BOM dla Excela) i pobiera go
-
             function eksportCSV() {
 
                 let csv =
@@ -926,9 +931,7 @@
 
             }
 
-            // IMPORT Z PLIKU CSV
-            // Wczytuje plik, parsuje wiersze i nadpisuje cały log
-
+            // IMPORT Z PLIKU CSV – łączenie z deduplikacją
             document.getElementById("importCSV").addEventListener("change", function (e) {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -939,34 +942,99 @@
                     const text = event.target.result;
                     const lines = text.trim().split(/\r?\n/);
 
-                    log = [];
+                    const importowane = [];
 
                     for (let i = 1; i < lines.length; i++) {
                         let cols = lines[i].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
                         if (!cols) continue;
 
-                        cols = cols.map(x =>
-                            x.replace(/^"/, "").replace(/"$/, "")
-                        );
+                        cols = cols.map(x => x.replace(/^"/, "").replace(/"$/, ""));
 
-                        log.push({
-                            data: cols[0] || "",
-                            czas: cols[1] || "",
-                            freq: cols[2] || "",
-                            stacja: cols[3] || "",
-                            qth: cols[4] || "",
-                            jezyk: cols[5] || "",
-                            sinpo: cols[6] || "",
-                            qsl: cols[7] || "",
-                            odbiornik: cols[8] || "",
-                            antena: cols[9] || "",
+                        importowane.push({
+                            data: (cols[0] || "").trim(),
+                            czas: (cols[1] || "").trim(),
+                            freq: (cols[2] || "").trim(),
+                            stacja: (cols[3] || "").trim(),
+                            qth: (cols[4] || "").trim(),
+                            jezyk: (cols[5] || "").trim(),
+                            sinpo: (cols[6] || "").trim(),
+                            qsl: (cols[7] || "").trim(),
+                            odbiornik: (cols[8] || "").trim(),
+                            antena: (cols[9] || "").trim(),
                             uwagi: cols[10] || ""
                         });
                     }
 
+                    // Jeśli w logu już coś jest – potwierdzenie trybu łączenia
+                    if (log.length > 0) {
+                        const ok = confirm(
+                            `W logu jest już ${log.length} wpisów.\n\n` +
+                            `OK  = POŁĄCZ (dodaj nowe, zaktualizuj istniejące, bez duplikatów)\n` +
+                            `Anuluj = przerwij import\n\n` +
+                            `Aby ZASTĄPIĆ cały log – najpierw użyj przycisku „Usuń cały log”.`
+                        );
+                        if (!ok) {
+                            e.target.value = "";
+                            return;
+                        }
+                    }
+
+                    // Normalizacja kHz do porównania
+                    const normFreq = f =>
+                        (f || "").toString().replace(/\s/g, "").replace(",", ".");
+
+                    const klucz = r =>
+                        `${r.data}|${r.czas}|${normFreq(r.freq)}|${r.stacja.toLowerCase()}`;
+
+                    // Mapa istniejących wpisów
+                    const mapa = new Map();
+                    log.forEach((r, i) => mapa.set(klucz(r), i));
+
+                    let dodane = 0, zaktualizowane = 0, bezZmian = 0;
+
+                    importowane.forEach(r => {
+                        const k = klucz(r);
+
+                        if (mapa.has(k)) {
+                            const idx = mapa.get(k);
+                            const stary = log[idx];
+
+                            const pola = ["data", "czas", "freq", "stacja", "qth", "jezyk",
+                                "sinpo", "qsl", "odbiornik", "antena", "uwagi"];
+
+                            const rozni = pola.some(p => (stary[p] || "") !== (r[p] || ""));
+
+                            if (rozni) {
+                                log[idx] = { ...stary, ...r };
+                                zaktualizowane++;
+                            } else {
+                                bezZmian++;
+                            }
+                        } else {
+                            log.push(r);
+                            mapa.set(k, log.length - 1);
+                            dodane++;
+                        }
+                    });
+
+                    // Uporządkowanie po dacie/godzinie malejąco
+                    log.sort((a, b) => {
+                        const da = new Date(a.data + "T" + a.czas);
+                        const db = new Date(b.data + "T" + b.czas);
+                        return db - da;
+                    });
+
                     zapisz();
                     pokazTabele();
-                    alert("Zaimportowano " + log.length + " wpisów.");
+
+                    alert(
+                        `Import zakończony.\n\n` +
+                        `Dodano nowych:        ${dodane}\n` +
+                        `Zaktualizowano:       ${zaktualizowane}\n` +
+                        `Bez zmian (duplikaty): ${bezZmian}\n\n` +
+                        `Łącznie w logu: ${log.length} wpisów.`
+                    );
+
                     e.target.value = "";
                 };
 
@@ -974,8 +1042,6 @@
             });
 
             // INICJALIZACJA
-            // Zapis stanu i pierwsze wyrenderowanie tabeli
-
             zapisz();
             pokazTabele();
             function edytujQSL(index, wartosc) {
