@@ -58,6 +58,16 @@
             font-size: 14px;
         }
 
+        .info {
+            background: #e7f3ff;
+            border: 1px solid #b6d9ff;
+            border-left: 5px solid #0d6efd;
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin: 12px 0;
+            font-size: 14px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -127,6 +137,53 @@
         .backBtn:hover {
             background: #0062cc;
         }
+
+        .downloadBtn {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .downloadBtn:hover {
+            background: #1e7e34;
+        }
+
+        /* Spis treści */
+        .toc {
+            background: #f8f9fb;
+            border: 1px solid #e3e8ee;
+            border-radius: 6px;
+            padding: 12px 20px;
+            margin-top: 20px;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            color: #1e3a5f;
+        }
+
+        .toc ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .toc a {
+            color: #0d6efd;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        /* Podświetlenie sekcji po kliknięciu w spis treści */
+        :target {
+            scroll-margin-top: 20px;
+        }
     </style>
 </head>
 
@@ -146,7 +203,24 @@
             Dlatego <b>regularnie rób eksport do pliku CSV</b>.
         </div>
 
-        <h2>1. Dodawanie wpisu</h2>
+        <div class="toc">
+            <h3>Spis treści</h3>
+            <ol>
+                <li><a href="#dodawanie">Dodawanie wpisu</a></li>
+                <li><a href="#tabela">Tabela wpisów</a></li>
+                <li><a href="#qsl">Status QSL</a></li>
+                <li><a href="#sinpo">SINPO – skróty</a></li>
+                <li><a href="#karta">Karta QSL – podgląd i wydruk</a></li>
+                <li><a href="#przyciski">Przyciski i operacje</a></li>
+                <li><a href="#szukanie">Wyszukiwanie</a></li>
+                <li><a href="#csv">Format pliku CSV</a></li>
+                <li><a href="#zalecenia">Zalecenia praktyczne</a></li>
+                <li><a href="#ograniczenia">Znane ograniczenia</a></li>
+                <li><a href="#pobierz">Pobierz przykładowy log</a></li>
+            </ol>
+        </div>
+
+        <h2 id="dodawanie">1. Dodawanie wpisu</h2>
 
         <p>Formularz znajduje się na górze strony aplikacji. Wypełnij pola i
             kliknij <b>„Dodaj wpis”</b>.</p>
@@ -208,7 +282,7 @@
         <p>Pola <b>Odbiornik</b>, <b>Antena</b> oraz <b>Miejsce odbioru</b> są zapamiętywane w przeglądarce.
             Po odświeżeniu strony formularz wypełni się automatycznie Twoimi ostatnimi ustawieniami.</p>
 
-        <h2>2. Tabela wpisów</h2>
+        <h2 id="tabela">2. Tabela wpisów</h2>
 
         <p>Wpisy wyświetlane są od <b>najnowszego</b> do najstarszego. Kliknij
             w wybraną komórkę, aby ją <b>edytować bezpośrednio w tabeli</b>.
@@ -226,7 +300,7 @@
         <p>Błędne dane (np. litera zamiast cyfry w SINPO, zły format daty) zostaną
             odrzucone i przywrócona zostanie poprzednia poprawna wartość.</p>
 
-        <h2>3. Status QSL</h2>
+        <h2 id="qsl">3. Status QSL</h2>
 
         <p>Kolumna <b>QSL</b> pozwala śledzić status karty potwierdzającej
             odbiór:</p>
@@ -239,7 +313,7 @@
 
         <p>Zmiana stanu zapisuje się od razu po wybraniu z listy.</p>
 
-        <h2>4. SINPO – skróty</h2>
+        <h2 id="sinpo">4. SINPO – skróty</h2>
 
         <p><b>SINPO</b> to skala oceny odbioru używana przez DX-owców, składająca
             się z pięciu cyfr od 1 do 5:</p>
@@ -315,7 +389,173 @@
         <p>Przykład: <code>45444</code> – dobra siła sygnału, minimalne zakłócenia
             i szumy, brak zniekształceń, ogólnie dobry odbiór.</p>
 
-        <h2>5. Przyciski i operacje</h2>
+        <h2 id="karta">5. Karta QSL – podgląd i wydruk</h2>
+
+        <p>Każdy wpis w logu można obejrzeć jako gotową <b>kartę QSL</b>
+            — czyli klasyczne potwierdzenie odbioru, jakie wysyła się do stacji
+            nadawczej. Karta generowana jest automatycznie na podstawie danych
+            z wpisu — nie trzeba nic wpisywać ręcznie.</p>
+
+        <h3>5.1. Jak otworzyć podgląd karty</h3>
+
+        <ol>
+            <li>W tabeli wpisów znajdź wiersz, który chcesz obejrzeć.</li>
+            <li>W kolumnie <b>Operacje</b> kliknij niebieski przycisk
+                <b>I</b> (Info).
+            </li>
+            <li>Otworzy się okno <b>„Szczegóły wpisu”</b> z podglądem karty QSL
+                oraz sekcją <b>Uwagi</b> pod spodem.</li>
+        </ol>
+
+        <h3>5.2. Co znajduje się na karcie</h3>
+
+        <p>Karta ma standardowy wymiar <b>14 × 9 cm</b> (format poziomy,
+            jak klasyczna karta QSL) i zawiera:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:190px">Element</th>
+                    <th>Skąd pochodzi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>Nagłówek „QSL – Confirmation of Reception”</b></td>
+                    <td>Stały tekst, po angielsku (międzynarodowy standard).</td>
+                </tr>
+                <tr>
+                    <td><b>Nazwa stacji</b> (duża czcionka)</td>
+                    <td>Pole <b>Stacja</b> z wpisu.</td>
+                </tr>
+                <tr>
+                    <td><b>Częstotliwość</b> (zielona)</td>
+                    <td>Pole <b>Częstotliwość</b> + jednostka kHz.</td>
+                </tr>
+                <tr>
+                    <td><b>Data UTC / Godzina UTC / Język</b></td>
+                    <td>Pola <b>Data</b>, <b>Czas</b>, <b>Język</b> z wpisu
+                        (trzy kafelki w jednym rzędzie).</td>
+                </tr>
+                <tr>
+                    <td><b>Pasek SINPO</b> (5 niebieskich kafelków S-I-N-P-O)</td>
+                    <td>Pole <b>SINPO</b> — każda cyfra w osobnym kafelku.</td>
+                </tr>
+                <tr>
+                    <td><b>QTH (Rx)</b></td>
+                    <td>Pole <b>Miejsce odbioru (QTH odb.)</b>.</td>
+                </tr>
+                <tr>
+                    <td><b>Receiver</b></td>
+                    <td>Pole <b>Odbiornik</b>.</td>
+                </tr>
+                <tr>
+                    <td><b>Antenna</b></td>
+                    <td>Pole <b>Antena</b>.</td>
+                </tr>
+                <tr>
+                    <td><b>Stopka</b> (autor + linia na podpis)</td>
+                    <td>Stały tekst: „Broadcast DX Logger by SQ1KSM” (kursywą)
+                        oraz linia z podpisem „SINPO Report – Listener's Signature”
+                        — miejsce na odręczny podpis nasłuchowca.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="info">
+            <b>Wskazówka:</b> w nagłówku okna „Szczegóły wpisu” widnieje
+            aktualny status QSL danego wpisu (🔴 BRAK / 🟡 WYSŁANA /
+            🟢 OTRZYMANA). Sam status nie jest drukowany na karcie —
+            jest to informacja wyłącznie dla Ciebie.
+        </div>
+
+        <h3>5.3. Trzy tryby wydruku</h3>
+
+        <p>W oknie „Szczegóły wpisu” dostępne są <b>trzy przyciski wydruku</b>,
+            każdy drukuje co innego:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:220px">Przycisk</th>
+                    <th>Co zostanie wydrukowane</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>🖨 Drukuj samą QSL</b></td>
+                    <td>Tylko karta QSL (14 × 9 cm). <b>Bez</b> sekcji z uwagami,
+                        bez nagłówka okna i bez przycisków. Idealne, gdy chcesz
+                        wydrukować kartę na papierze QSL lub grubszym papierze
+                        i wysłać ją do stacji.</td>
+                </tr>
+                <tr>
+                    <td><b>🖨 Drukuj z uwagami</b></td>
+                    <td>Karta QSL (14 × 9 cm) <b>plus</b> sekcja „📝 Uwagi”
+                        pod spodem. Przydatne do archiwizacji — masz na jednej
+                        kartce i potwierdzenie, i swój opis odbioru (fading,
+                        godziny programu, uwagi o treści audycji itp.).</td>
+                </tr>
+                <tr>
+                    <td><b>🏷️ Drukuj naklejkę</b></td>
+                    <td>Miniaturowa wersja karty — <b>9 × 5 cm</b>, bez nagłówka
+                        „QSL – Confirmation of Reception” i bez stopki z linią
+                        podpisu. Służy do naklejenia na zwykłą kopertę lub
+                        na gotową kartę QSL stacji (jako uzupełnienie).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>5.4. Jak przebiega wydruk</h3>
+
+        <ol>
+            <li>Kliknij wybrany przycisk wydruku.</li>
+            <li>Otworzy się standardowe okno druku przeglądarki
+                (systemowe okno „Drukuj”).</li>
+            <li>W podglądzie zobaczysz <b>tylko</b> to, co ma być wydrukowane
+                — reszta aplikacji (tabela, formularz, przyciski) jest
+                automatycznie ukrywana.</li>
+            <li>Wybierz drukarkę, sprawdź podgląd i zatwierdź.</li>
+        </ol>
+
+        <div class="info">
+            <b>Uwaga o formacie papieru:</b> aplikacja nie wymusza formatu A4
+            ani konkretnego rozmiaru strony w oknie druku. Karta jest
+            drukowana w swoim naturalnym rozmiarze (14 × 9 cm lub 9 × 5 cm).
+            Jeśli chcesz mieć pewność, że wymiary będą dokładne:
+            <ul>
+                <li>w oknie druku ustaw <b>skalę na 100%</b> (nie „Dopasuj do strony”),</li>
+                <li>wyłącz opcję <b>„Nagłówki i stopki”</b> (żeby nie dodawały się
+                    adresy URL i numery stron),</li>
+                <li>najlepiej użyj papieru <b>A4</b> i wytnij kartę po wydruku
+                    — albo papieru o formacie zbliżonym do karty QSL.</li>
+            </ul>
+        </div>
+
+        <h3>5.5. Podpis na karcie</h3>
+
+        <p>W stopce karty (po prawej stronie) znajduje się <b>linia</b> z opisem
+            „SINPO Report – Listener's Signature”. To miejsce na Twój
+            <b>odręczny podpis</b> — karty QSL tradycyjnie podpisuje się
+            odręcznie, żeby potwierdzić autentyczność raportu.
+        </p>
+
+        <ul>
+            <li><b>Na wydruku „Drukuj samą QSL”</b> — podpisujesz się
+                po wydrukowaniu, nad linią (miejsce na to jest zarezerwowane).</li>
+            <li><b>Na naklejce (9 × 5 cm)</b> — stopka z linią jest ukryta,
+                bo naklejka służy tylko jako etykieta, nie jako pełna karta.</li>
+        </ul>
+
+        <h3>5.6. Zamknięcie okna podglądu</h3>
+
+        <p>Aby wrócić do tabeli wpisów, kliknij czerwony przycisk
+            <b>„Zamknij”</b> w oknie „Szczegóły wpisu” (lub kliknij w tło
+            poza oknem). Okno zamyka się bez zapisywania jakichkolwiek zmian —
+            podgląd karty jest tylko do odczytu.
+        </p>
+
+        <h2 id="przyciski">6. Przyciski i operacje</h2>
 
         <table>
             <thead>
@@ -338,7 +578,7 @@
                     <td><b>Import CSV</b> (szary)</td>
                     <td>Wczytuje plik CSV w formacie zgodnym z eksportem.
                         Domyślnie <b>łączy</b> z istniejącym logiem: nowe wpisy dodaje,
-                        istniejące aktualizuje, duplikaty pomija (szczegóły w sekcji 7).
+                        istniejące aktualizuje, duplikaty pomija (szczegóły w sekcji 8).
                         Aby <b>zastąpić</b> cały log – najpierw użyj „Usuń cały log”.
                     </td>
                 </tr>
@@ -351,21 +591,10 @@
                     <td>Usuwa wszystkie wpisy (po potwierdzeniu).</td>
                 </tr>
                 <tr>
-                    <td><b>Info</b> (niebieski, w tabeli)</td>
-                    <td>Otwiera okno ze szczegółami wpisu: status QSL, podgląd karty QSL, uwagi, odbiornik, antena itp.
-                        W oknie dostępne są też przyciski drukowania.</td>
-                </tr>
-                <tr>
-                    <td><b>Drukuj samą QSL</b> (w oknie Info)</td>
-                    <td>Drukuje tylko kartę QSL (14x9 cm) bez sekcji z uwagami.</td>
-                </tr>
-                <tr>
-                    <td><b>Drukuj z uwagami</b> (w oknie Info)</td>
-                    <td>Drukuje kartę QSL (14x9 cm) wraz z Twoimi uwagami pod spodem.</td>
-                </tr>
-                <tr>
-                    <td><b>Drukuj naklejkę</b> (w oknie Info)</td>
-                    <td>Drukuje mniejszą wersję naklejki (9x5 cm) bez nagłówka i stopki.</td>
+                    <td><b>I – Info</b> (niebieski, w tabeli)</td>
+                    <td>Otwiera okno ze szczegółami wpisu: podgląd karty QSL,
+                        uwagi, odbiornik, antena oraz przyciski drukowania
+                        (patrz sekcja 5).</td>
                 </tr>
                 <tr>
                     <td><b>🗑</b> (czerwony, w tabeli)</td>
@@ -374,7 +603,7 @@
             </tbody>
         </table>
 
-        <h2>6. Wyszukiwanie</h2>
+        <h2 id="szukanie">7. Wyszukiwanie</h2>
 
         <p>Pole <b>„Szukaj…”</b> filtruje wpisy na żywo. Wyszukiwanie obejmuje
             <b>wszystkie pola</b> każdego wpisu (data, częstotliwość, stacja,
@@ -382,7 +611,7 @@
             wielkości liter.
         </p>
 
-        <h2>7. Format pliku CSV</h2>
+        <h2 id="csv">8. Format pliku CSV</h2>
 
         <p>Plik CSV ma następujące kolumny (w tej kolejności):</p>
 
@@ -430,7 +659,7 @@
         <p>Jeśli log nie jest pusty, przed importem pojawia się okno
             potwierdzenia – można wtedy anulować import bez utraty danych.</p>
 
-        <h2>8. Zalecenia praktyczne</h2>
+        <h2 id="zalecenia">9. Zalecenia praktyczne</h2>
 
         <ol>
             <li><b>Eksportuj CSV</b> po każdej sesji nasłuchowej – to jedyna
@@ -443,16 +672,44 @@
                 wpisów i dopasowywanie do publikowanych harmonogramów stacji.</li>
             <li>W polu <b>Uwagi</b> warto zapisywać godzinę rozpoczęcia i
                 zakończenia audycji – pomaga to później przy weryfikacji QSL.</li>
+            <li>Przy druku karty QSL ustaw w oknie druku <b>skalę 100%</b> i
+                wyłącz nagłówki/stopki — dzięki temu karta zachowa dokładny
+                wymiar 14 × 9 cm.</li>
         </ol>
 
-        <h2>9. Znane ograniczenia</h2>
+        <h2 id="ograniczenia">10. Znane ograniczenia</h2>
 
         <ul>
             <li>Dane trzymane są w <b>localStorage</b> – jedna przeglądarka = jeden log.<br>
                 Synchronizacja między urządzeniami nie jest przewidziana, trzeba korzystać z importu i eksportu logu.
             </li>
             <li>Brak automatycznej kopii zapasowej – tylko ręczny eksport CSV.</li>
+            <li>Wydruk karty QSL zależy od ustawień drukarki i przeglądarki —
+                aplikacja nie wymusza formatu papieru ani skali. Dla dokładnych
+                wymiarów 14 × 9 cm / 9 × 5 cm ustaw skalę 100% w oknie druku.</li>
         </ul>
+
+        <h2 id="pobierz">11. Pobierz przykładowy log</h2>
+
+        <p>Jeśli chcesz przetestować import lub zobaczyć, jak wygląda
+            prawidłowo sformatowany plik CSV, pobierz przykładowy log:</p>
+
+        <div>
+            <a href="test_Log.csv" class="downloadBtn" download="test_Log.csv">⬇ Pobierz przykładowy log</a>
+        </div>
+
+        <p>Plik <code>test_Log.csv</code> zawiera kilka przykładowych wpisów
+            w formacie zgodnym z opisem w sekcji 8. Możesz go zaimportować
+            przyciskiem <b>„Import CSV”</b>, a następnie swobodnie edytować
+            lub usunąć testowe dane.</p>
+
+        <div class="info">
+            <b>Uwaga:</b> jeśli otwierasz tę stronę bezpośrednio z dysku
+            (adres zaczyna się od <code>file://</code>), niektóre przeglądarki
+            mogą zablokować pobranie pliku. W takim wypadku otwórz pomoc przez
+            lokalny serwer HTTP (np. <code>python -m http.server</code>) lub
+            skopiuj plik <code>test_Log.csv</code> ręcznie z katalogu aplikacji.
+        </div>
 
         <a href="javascript:window.close()" class="backBtn">← Zamknij pomoc</a>
 
