@@ -97,3 +97,76 @@ Po kliknięciu przycisku **Info** w tabeli, otwiera się okno ze szczegółami. 
 ## Format pliku CSV
 
 Kolumny (w tej kolejności):
+DataUTC, CzasUTC, Czestotliwosc, Stacja, QTH_Nadajnika, QTH_Odbiorcy, Jezyk, SINPO, QSL, Odbiornik, Antena, Uwagi
+
+- Separator: przecinek
+- Kodowanie: **UTF-8 z BOM** (poprawnie otwiera się w Excelu)
+- Dozwolone wartości kolumny **QSL**: `(puste)`, `Wysłana`, `Otrzymana`
+- Znaki `"` w polach tekstowych są podwajane (`""`) zgodnie ze standardem CSV
+- Pierwszy wiersz to nagłówek — przy imporcie jest pomijany
+
+✅ **Import łączy dane (nie nadpisuje).** Każdy wpis jest porównywany z istniejącymi (klucz: Data + Czas + Częstotliwość + Stacja). Nowe wpisy są dodawane, istniejące aktualizowane, a duplikaty pomijane. Obsługiwane są również starsze pliki 11-kolumnowe.
+
+---
+
+## Przechowywanie danych
+
+Wszystkie dane przechowywane są w **`localStorage`** przeglądarki pod dwoma kluczami:
+- `broadcastDXLog` – przechowuje wpisy z dziennika.
+- `broadcastDXUstawienia` – przechowuje Odbiornik, Antenę i QTH odbioru (aby nie wpisywać ich za każdym razem).
+
+**Konsekwencje:**
+
+- Jedna przeglądarka = jeden log.
+- Brak synchronizacji między urządzeniami.
+- Wyczyszczenie danych przeglądarki, tryb prywatny lub zmiana urządzenia → **utrata logu**.
+- **Regularnie eksportuj CSV** — to jedyna kopia zapasowa poza przeglądarką.
+
+---
+
+## Zalecenia praktyczne
+
+1. **Eksportuj CSV** po każdej sesji nasłuchowej.
+2. Przed importem CSV warto **zrobić kopię** aktualnego logu. Import co prawda domyślnie łączy dane, ale kopia chroni przed skutkami pomyłki (np. gdy plik CSV zawiera błędne dane).
+3. Używaj spójnego formatu czasu UTC — ułatwia porównywanie wpisów z harmonogramami stacji.
+4. W polu **Uwagi** zapisuj godziny rozpoczęcia i zakończenia audycji — pomaga przy weryfikacji QSL.
+
+---
+
+## Struktura projektu
+.
+├── index.html # główna aplikacja (cała logika + style + dane)
+├── help.html # strona pomocy (otwierana przyciskiem „Pomoc”)
+└── README.md # ten plik
+
+Wszystko zawarte jest w pojedynczych plikach HTML — brak zależności, brak `node_modules`, brak build-stepu.
+
+---
+
+## Wsparcie przeglądarek
+
+Aplikacja korzysta z:
+
+- `localStorage`
+- `Blob` / `URL.createObjectURL` (eksport)
+- `FileReader` (import)
+- `contenteditable` (edycja w tabeli)
+- ES6+ (arrow functions, template literals, `padStart`, `forEach`)
+- CSS Grid / Flexbox / `@media print`
+
+Działa we wszystkich aktualnych wersjach Chrome, Firefox, Edge i Safari.
+
+---
+
+## Znane ograniczenia
+
+- Dane trzymane są wyłącznie w `localStorage` — brak synchronizacji chmurowej.
+- Brak automatycznej kopii zapasowej — tylko ręczny eksport CSV.
+
+---
+
+## Licencja
+
+Projekt udostępniany na licencji **MIT** — możesz go swobodnie używać, modyfikować i rozpowszechniać.
+
+Copyright © Sławek Kuchowicz (SQ1KSM)
