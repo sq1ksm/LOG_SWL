@@ -403,13 +403,22 @@
             bottom: 10px;
             left: 14px;
             right: 14px;
-            border-top: 1px dashed #bbb;
             padding-top: 4px;
             display: flex;
             justify-content: space-between;
+            align-items: flex-end;
             font-size: 9px;
             color: #777;
             font-family: Arial, sans-serif;
+        }
+
+        /* Linia podpisu tylko po prawej stronie karty */
+        .qslSignature .signLine {
+            border-top: 1px solid #999;
+            padding-top: 22px;
+            /* miejsce na odręczny podpis */
+            min-width: 220px;
+            text-align: center;
         }
 
         .qslUwagiTitle {
@@ -1067,7 +1076,7 @@
                         </select>
                     </td>
                     <td>
-                        <button class="noteBtn" onclick="pokazUwagi(${index})">Info</button>
+                        <button class="noteBtn" onclick="pokazUwagi(${index})">I</button>
                         <button class="delBtn" onclick="usun(${index})">🗑</button>
                     </td>
                 </tr>
@@ -1177,7 +1186,7 @@
 
                     <div class="qslSignature">
                         <span>Broadcast DX Logger by SQ1KSM</span>
-                        <span>SINPO Report – Listener's Signature</span>
+                        <span class="signLine">SINPO Report – Listener's Signature</span>
                     </div>
 
                 </div>
