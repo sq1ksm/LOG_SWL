@@ -78,7 +78,7 @@ Po kliknięciu przycisku **Info** w tabeli, otwiera się okno ze szczegółami. 
 
 ---
 
-## 📐 Skala SINPO
+## Skala SINPO
 
 **SINPO** to standardowa skala oceny odbioru używana przez DX-owców — pięć cyfr od 1 do 5:
 
