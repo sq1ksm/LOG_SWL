@@ -134,10 +134,10 @@ Wszystkie dane przechowywane są w **`localStorage`** przeglądarki pod dwoma kl
 ---
 
 ## Struktura projektu
-.
-├── index.html # główna aplikacja (cała logika + style + dane)
-├── help.html # strona pomocy (otwierana przyciskiem „Pomoc”)
-└── README.md # ten plik
+ 
+index.html # główna aplikacja (cała logika + style + dane)
+help.html # strona pomocy (otwierana przyciskiem „Pomoc”)
+README.md # ten plik
 
 Wszystko zawarte jest w pojedynczych plikach HTML — brak zależności, brak `node_modules`, brak build-stepu.
 
